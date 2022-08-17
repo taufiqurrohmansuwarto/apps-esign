@@ -1,5 +1,5 @@
 import { Card, Skeleton } from "antd";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import SettingLayout from "../../src/components/SettingLayout";
 import documents from "../../src/services/documents";
 

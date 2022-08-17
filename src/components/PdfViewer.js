@@ -1,10 +1,7 @@
 // this is fucking pdfviewer
 
-import { Spin } from "antd";
 import { useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
-import { useQuery } from "react-query";
-import documents from "../services/documents";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 function PdfViewer({ docUrl }) {

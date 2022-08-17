@@ -20,7 +20,7 @@ import {
 } from "antd";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import Layout from "../src/components/Layout";
 import documents from "../src/services/documents";
 
@@ -36,7 +36,7 @@ const Greetings = ({ user }) => {
         </Col>
         <Col>
           <Row>
-            <Title level={4}>Welcome back, {user?.name}</Title>
+            <Title level={4}>Selamat datang kembali, {user?.name}</Title>
           </Row>
 
           <Row>
@@ -83,7 +83,7 @@ const DashboardStatistic = ({ data, loading }) => {
 };
 
 const Dashboard = () => {
-  const { data, status } = useSession();
+  const { data } = useSession();
   const { data: dashboardData, isLoading } = useQuery("dashboard", () =>
     documents.getDashboard()
   );

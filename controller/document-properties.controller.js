@@ -1,10 +1,6 @@
 import FormData from "form-data";
 import qs from "query-string";
 
-const dashbaord = (fetcher) => {
-  return fetcher.get(`/dashboard`);
-};
-
 const checkDocument = (fetcher, documentId) => {
   return fetcher.get(`/documents/${documentId}/check`);
 };
@@ -36,14 +32,6 @@ export const approveSign = async (req, res) => {
     res.status(400).json({ code: 400, message: "Internal Server Error" });
   }
 };
-
-const rejectSignApi = (documentId, data) => {
-  return fetcher.delete(`/documents/${documentId}/sign-request`);
-};
-
-// reviewer
-const approveReviewApi = (documentId) => {};
-const rejectReviewApi = (documentId) => {};
 
 const uploadBackend = (fetcher, formdata) => {
   return fetcher.post("/uploads", formdata, {

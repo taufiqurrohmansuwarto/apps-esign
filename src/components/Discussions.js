@@ -12,7 +12,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuerimport { useQuery } from "@tansack/react-query";
 import documents from "../services/documents";
 
 dayjs.extend(relativeTime);

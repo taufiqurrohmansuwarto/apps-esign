@@ -22,7 +22,7 @@ import { capitalize, startCase } from "lodash";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useState } from "react";
-import { useQuery } from "react-query";
+import { useQuery } from "@tansack/react-query";
 import documents from "../services/documents";
 import { documentStatus, recipientStatus } from "../utils";
 

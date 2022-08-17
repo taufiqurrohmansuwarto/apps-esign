@@ -2,7 +2,7 @@ import { Skeleton, Space, Tag } from "antd";
 import dayjs from "dayjs";
 import dynamic from "next/dynamic";
 import { useState } from "react";
-import { useQuery } from "react-query";
+import { useQuery } from "@tansack/react-query";
 import documents from "../services/documents";
 import { colorOfItem } from "../utils";
 

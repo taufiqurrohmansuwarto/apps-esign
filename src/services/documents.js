@@ -99,6 +99,16 @@ const approveSign = (data) => {
   return axios.put(`/esign/api/documents/${documentId}/sign`, result);
 };
 
+const checkDocumentPublic = (data) => {
+  return axios
+    .post(`/esign/api/check/document`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then((res) => res.data);
+};
+
 export default {
   download,
   getStamps,
@@ -120,4 +130,5 @@ export default {
 
   // sign and review
   approveSign,
+  checkDocumentPublic,
 };

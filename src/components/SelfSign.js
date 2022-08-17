@@ -14,7 +14,7 @@ import {
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import documentServices from "../../src/services/documents";
 import SignMove from "./SignMove";
 
