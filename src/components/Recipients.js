@@ -1,7 +1,7 @@
 import { QuestionCircleFilled } from "@ant-design/icons";
 import { Card, Col, Row, Skeleton, Space, Tag, Tooltip } from "antd";
 import dynamic from "next/dynamic";
-import { useQuery } from "@tansack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import documents from "../services/documents";
 import { documentStatus, isNoRecipientsForRequestFromOthers } from "../utils";
 

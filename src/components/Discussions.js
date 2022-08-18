@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tansack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   Avatar,
   Button,

@@ -1,6 +1,6 @@
 import { Avatar, Card, Descriptions, Space, Tag, Typography } from "antd";
 import dayjs from "dayjs";
-import { useQuery } from "@tansack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import documents from "../services/documents";
 import Histories from "./Histories";
 
