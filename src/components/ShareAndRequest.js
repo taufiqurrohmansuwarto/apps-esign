@@ -14,7 +14,7 @@ import {
 import isEmpty from "lodash/isEmpty";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addRecipients,
