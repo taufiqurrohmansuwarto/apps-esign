@@ -138,62 +138,68 @@ const Dashboard = () => {
   );
 
   return (
-    <Layout>
-      <Card>
-        <Greetings user={data?.user} />
-        <Divider />
-        <Typography.Title level={5}>Status</Typography.Title>
-        <Status data={status} loading={isLoadingStatus} />
-        <Divider />
-        <DashboardStatistic loading={isLoading} data={dashboardData?.data} />
-        <Divider />
-        <Row>
-          <Col span={12}>
-            <div style={{ paddingTop: 10, paddingBottom: 10 }}>
-              <Space>
-                <Link href="/documents/list/all">
-                  <a>
-                    <ProfileOutlined /> Lihat Semua dokumen
-                  </a>
-                </Link>
-              </Space>
-            </div>
-            <div style={{ paddingTop: 10, paddingBottom: 10 }}>
-              <Space>
-                <Link href="/settings/activity-log">
-                  <a>
-                    <InteractionOutlined /> Aktivitas
-                  </a>
-                </Link>
-              </Space>
-            </div>
-            <div style={{ paddingTop: 10, paddingBottom: 10 }}>
-              <Link href="/settings/signature">
+    <Card>
+      <Greetings user={data?.user} />
+      <Divider />
+      <Typography.Title level={5}>Status</Typography.Title>
+      <Status data={status} loading={isLoadingStatus} />
+      <Divider />
+      <DashboardStatistic loading={isLoading} data={dashboardData?.data} />
+      <Divider />
+      <Row>
+        <Col span={12}>
+          <div style={{ paddingTop: 10, paddingBottom: 10 }}>
+            <Space>
+              <Link href="/documents/list/all">
                 <a>
-                  <Space>
-                    <FileDoneOutlined /> Stempel
-                  </Space>
+                  <ProfileOutlined /> Lihat Semua dokumen
                 </a>
               </Link>
-            </div>
-            <div style={{ paddingTop: 10, paddingBottom: 10 }}>
-              <Link href="/settings/faq">
+            </Space>
+          </div>
+          <div style={{ paddingTop: 10, paddingBottom: 10 }}>
+            <Space>
+              <Link href="/settings/activity-log">
                 <a>
-                  <Space>
-                    <QuestionCircleOutlined /> Butuh bantuan?
-                  </Space>
+                  <InteractionOutlined /> Aktivitas
                 </a>
               </Link>
-            </div>
-          </Col>
-        </Row>
-      </Card>
-    </Layout>
+            </Space>
+          </div>
+          <div style={{ paddingTop: 10, paddingBottom: 10 }}>
+            <Link href="/settings/signature">
+              <a>
+                <Space>
+                  <FileDoneOutlined /> Stempel
+                </Space>
+              </a>
+            </Link>
+          </div>
+          <div style={{ paddingTop: 10, paddingBottom: 10 }}>
+            <Link href="/settings/faq">
+              <a>
+                <Space>
+                  <QuestionCircleOutlined /> Butuh bantuan?
+                </Space>
+              </a>
+            </Link>
+          </div>
+        </Col>
+      </Row>
+    </Card>
   );
 };
 
 Dashboard.auth = {
   roles: ["USER"],
+};
+
+Dashboard.getLayout = function getLayout(page) {
+  return (
+    <Layout active="/dashboard" disableContentMargin={false}>
+      {page}
+    </Layout>
+  );
 };
 
 export default Dashboard;

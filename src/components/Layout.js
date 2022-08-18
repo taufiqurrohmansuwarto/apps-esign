@@ -45,11 +45,14 @@ const menuItemRender = (options, element) => {
   );
 };
 
-function Layout({ children, title = "E-SIGN" }) {
+function Layout({
+  children,
+  title = "E-SIGN",
+  active = "/documents/list/all",
+  disableContentMargin = true,
+}) {
   const { data, status } = useSession();
   const router = useRouter();
-
-  const active = `/${router?.asPath?.split("/")?.[1]}`;
 
   return (
     <ProLayout
@@ -57,9 +60,9 @@ function Layout({ children, title = "E-SIGN" }) {
       collapsed
       navTheme="dark"
       style={{ minHeight: "100vh" }}
+      disableContentMargin={disableContentMargin}
       menuHeaderRender={() => <ButtonCreate />}
       menuItemRender={menuItemRender}
-      // menuExtraRender={() => <ButtonCreate />}
       selectedKeys={[active]}
       rightContentRender={() => {
         return (
@@ -73,7 +76,6 @@ function Layout({ children, title = "E-SIGN" }) {
       }}
       title={title}
       theme="dark"
-      // disableContentMargin
       fixSiderbar
       loading={status === "loading"}
       collapsedButtonRender={false}

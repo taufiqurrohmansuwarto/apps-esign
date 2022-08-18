@@ -7,6 +7,7 @@ import {
   FieldTimeOutlined,
   FileOutlined,
   FolderOpenOutlined,
+  SettingOutlined,
   UnorderedListOutlined,
 } from "@ant-design/icons";
 
@@ -14,56 +15,79 @@ export default {
   routes: [
     {
       path: "/dashboard",
-      name: " Dashboard",
+      name: " Dasbor",
       icon: <DashboardOutlined />,
     },
     {
-      path: "/documents",
-      name: " Documents",
+      path: "/documents/list/all",
+      name: " Dokumen",
       hideChildrenInMenu: true,
       icon: <FileOutlined />,
       routes: [
         {
           path: "/documents/list/all",
-          name: "All Documents",
+          name: "Semua dokumen",
           icon: <UnorderedListOutlined />,
         },
         {
           path: "/documents/list/draft",
-          name: "Draft",
+          name: "Draf",
           icon: <FolderOpenOutlined />,
         },
         {
           path: "/documents/list/pending",
-          name: "Pending",
+          name: "Menunggu",
           icon: <ClockCircleOutlined />,
         },
         {
           path: "/documents/list/done",
-          name: "Done",
+          name: "Selesai",
           icon: <CheckSquareOutlined />,
         },
         {
           path: "/documents/list/expired",
-          name: "Expired",
+          name: "Kadaluarsa",
           icon: <FieldTimeOutlined />,
         },
         {
           path: "/documents/list/archieved",
-          name: "Archieved",
+          name: "Arsip",
           icon: <BookOutlined />,
         },
         {
           path: "/documents/list/rejected",
-          name: "Rejected",
+          name: "Ditolak",
           icon: <CloseSquareOutlined />,
         },
       ],
     },
     {
-      // path: "/contacts",
-      // name: " Contacts",
-      // icon: <ContactsOutlined />,
+      path: "/settings/personal-information",
+      name: "Pengaturan",
+      hideChildrenInMenu: true,
+      icon: <SettingOutlined />,
+      routes: [
+        {
+          path: "/settings/personal-information",
+          name: "Informasi Akun",
+          icon: <UnorderedListOutlined />,
+        },
+        {
+          path: "/settings/activity-log",
+          name: "Aktivitas",
+          icon: <FolderOpenOutlined />,
+        },
+        {
+          path: "/settings/faq",
+          name: "Pertanyaan",
+          icon: <ClockCircleOutlined />,
+        },
+        {
+          path: "/settings/signatures",
+          name: "Stempel",
+          icon: <CheckSquareOutlined />,
+        },
+      ],
     },
   ],
 };

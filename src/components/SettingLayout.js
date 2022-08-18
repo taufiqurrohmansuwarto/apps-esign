@@ -50,44 +50,20 @@ const menuItemRender = (options, element) => {
 };
 
 function SettingLayout({ children, title = "E-SIGN" }) {
-  const { data, status } = useSession();
   const router = useRouter();
 
   return (
     <ProLayout
-      route={mainRoutes}
-      collapsed
-      style={{ minHeight: "100vh" }}
-      menuItemRender={menuItemRender}
-      rightContentRender={() => {
-        return (
-          <Space align="center">
-            <span>{data?.user?.name}</span>
-            <Dropdown overlay={menu}>
-              <Avatar style={{ cursor: "pointer" }} src={data?.user?.image} />
-            </Dropdown>
-          </Space>
-        );
-      }}
-      title={title}
-      theme="light"
-      disableContentMargin
-      fixSiderbar
-      loading={status === "loading"}
+      navTheme="light"
+      title="Documents"
+      menuHeaderRender={false}
       collapsedButtonRender={false}
+      collapsed={false}
+      route={settingsRoutes}
+      menuItemRender={menuItemRender}
+      selectedKeys={[router?.pathname]}
     >
-      <ProLayout
-        navTheme="light"
-        title="Documents"
-        menuHeaderRender={false}
-        collapsedButtonRender={false}
-        collapsed={false}
-        route={settingsRoutes}
-        menuItemRender={menuItemRender}
-        selectedKeys={[router?.pathname]}
-      >
-        {children}
-      </ProLayout>
+      {children}
     </ProLayout>
   );
 }

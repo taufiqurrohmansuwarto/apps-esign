@@ -2,6 +2,7 @@ import { Card, Table } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import SettingLayout from "../../src/components/SettingLayout";
 import documents from "../../src/services/documents";
+import Layout from "../../src/components/Layout";
 
 const Activity = () => {
   const { data, isLoading } = useQuery(["activities"], () =>
@@ -17,21 +18,27 @@ const Activity = () => {
   ];
 
   return (
-    <SettingLayout>
-      <Card title="Log Aktivitas">
-        <Table
-          size="small"
-          columns={columns}
-          loading={isLoading}
-          rowKey={(row) => row?.id}
-          dataSource={data?.data}
-          pagination={{
-            total: data?.meta?.total,
-            pageSize: 20,
-          }}
-        />
-      </Card>
-    </SettingLayout>
+    <Card title="Log Aktivitas">
+      <Table
+        size="small"
+        columns={columns}
+        loading={isLoading}
+        rowKey={(row) => row?.id}
+        dataSource={data?.data}
+        pagination={{
+          total: data?.meta?.total,
+          pageSize: 20,
+        }}
+      />
+    </Card>
+  );
+};
+
+Activity.getLayout = function getLayout(page) {
+  return (
+    <Layout active="/settings/personal-information">
+      <SettingLayout>{page}</SettingLayout>
+    </Layout>
   );
 };
 

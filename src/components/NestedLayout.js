@@ -50,51 +50,29 @@ const menuItemRender = (options, element) => {
 };
 
 function NestedLayout({ children, title = "E-SIGN" }) {
-  const { data, status } = useSession();
   const router = useRouter();
   const currentRoutes = {
-    routes: mainRoutes?.routes.find((r) => r?.path === "/documents")?.routes,
+    routes: mainRoutes?.routes.find((r) => r?.path === "/documents/list/all")
+      ?.routes,
   };
-  const active = `/${router?.asPath?.split("/")?.[1]}`;
+
+  // const active = `/${router?.asPath?.split("/")?.[1]}`;
 
   return (
     <ProLayout
-      route={mainRoutes}
-      collapsed
-      style={{ minHeight: "100vh" }}
-      menuItemRender={menuItemRender}
-      menuHeaderRender={() => <ButtonCreate />}
-      rightContentRender={() => {
-        return (
-          <Space align="center">
-            <span>{data?.user?.name}</span>
-            <Dropdown overlay={menu}>
-              <Avatar style={{ cursor: "pointer" }} src={data?.user?.image} />
-            </Dropdown>
-          </Space>
-        );
-      }}
-      title={title}
-      theme="light"
-      disableContentMargin
-      fixSiderbar
-      selectedKeys={[active]}
-      loading={status === "loading"}
+      navTheme="light"
+      title="Documents"
       collapsedButtonRender={false}
+      collapsed={false}
+      route={currentRoutes}
+      menuItemRender={menuItemRender}
+      menuDataRender={false}
+      menuExtraRender={false}
+      menuHeaderRender={false}
+      headerRender={false}
+      selectedKeys={[router?.pathname]}
     >
-      <ProLayout
-        navTheme="light"
-        title="Documents"
-        collapsedButtonRender={false}
-        // disableContentMargin
-        collapsed={false}
-        route={currentRoutes}
-        menuItemRender={menuItemRender}
-        menuHeaderRender={false}
-        selectedKeys={[router?.pathname]}
-      >
-        {children}
-      </ProLayout>
+      {children}
     </ProLayout>
   );
 }

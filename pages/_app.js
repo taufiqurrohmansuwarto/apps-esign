@@ -19,6 +19,8 @@ import CustomError from "../src/components/CustomError";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   const [queryClient] = useState(() => new QueryClient());
+  const getLayout = Component.getLayout || ((page) => page);
+
   return (
     <ConfigProvider locale={id}>
       <SessionProvider
@@ -31,7 +33,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
             <Hydrate state={pageProps.dehydratedState}>
               {Component.auth ? (
                 <Auth roles={Component.auth.roles}>
-                  <Component {...pageProps} />
+                  {getLayout(<Component {...pageProps} />)}
                 </Auth>
               ) : (
                 <Component {...pageProps} />
