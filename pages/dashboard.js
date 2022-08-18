@@ -1,14 +1,11 @@
 import {
-  CheckCircleTwoTone,
-  CloseCircleOutlined,
-  CloseCircleTwoTone,
+  CheckCircleTwoTone, CloseCircleTwoTone,
   FileDoneOutlined,
   FileSyncOutlined,
   InteractionOutlined,
   MailOutlined,
   ProfileOutlined,
-  QuestionCircleOutlined,
-  VerifiedOutlined,
+  QuestionCircleOutlined
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -21,7 +18,7 @@ import {
   Skeleton,
   Space,
   Statistic,
-  Typography,
+  Typography
 } from "antd";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -167,7 +164,7 @@ const Dashboard = () => {
             </Space>
           </div>
           <div style={{ paddingTop: 10, paddingBottom: 10 }}>
-            <Link href="/settings/signature">
+            <Link href="/settings/signatures">
               <a>
                 <Space>
                   <FileDoneOutlined /> Stempel

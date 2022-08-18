@@ -1,3 +1,4 @@
+import Layout from "../../../src/components/Layout";
 import RequestFromOthersUploadLayout from "../../../src/components/RequestFromOthersLayout";
 import UploadDocument from "../../../src/components/UploadDocument";
 
@@ -8,5 +9,13 @@ function Upload() {
     </RequestFromOthersUploadLayout>
   );
 }
+
+Upload.getLayout = function getLayout(page) {
+  return <Layout>{page}</Layout>;
+};
+
+Upload.auth = {
+  roles: ["USER"],
+};
 
 export default Upload;

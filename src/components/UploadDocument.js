@@ -24,7 +24,7 @@ const UploadDocument = ({ type = "selfSign" }) => {
 
     try {
       if (!title) {
-        message.warn("Document title is required!");
+        message.warn("Nama Dokumen tidak boleh kosong");
       } else {
         setLoadingSubmit(true);
         formData.append("document", file);
@@ -73,13 +73,13 @@ const UploadDocument = ({ type = "selfSign" }) => {
   return (
     <div>
       <Modal
-        title="Filename"
+        title="Nama File"
         visible={showModal}
         onCancel={handleCloseModal}
         onOk={handleOkModal}
         confirmLoading={loadingSubmit}
-        okText="Upload"
-        cancelText="Cancel"
+        okText="Unggah"
+        cancelText="Batal"
         centered
       >
         {fileList.length && (
@@ -100,10 +100,10 @@ const UploadDocument = ({ type = "selfSign" }) => {
           <InboxOutlined />
         </p>
         <p className="ant-upload-text">
-          Click or drag file to this area to upload
+          Tekan atau seret file ke area ini untuk mengupload
         </p>
         <p className="ant-upload-hint">
-          You can name your document after uploaded
+          Anda dapat mengubah nama dokumen setelah diupload
         </p>
       </Upload.Dragger>
     </div>

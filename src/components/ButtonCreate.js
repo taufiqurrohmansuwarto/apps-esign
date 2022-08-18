@@ -33,7 +33,10 @@ function ButtonCreate() {
     if (status?.message === "User tidak terdaftar dalam bsre") {
       return buttons.map((button) => ({
         ...button,
-        disabled: button?.name === "Self Sign" ? true : false,
+        disabled:
+          button?.name === "Self Sign" || button?.name === "Sign And Request"
+            ? true
+            : false,
       }));
     } else {
       return buttons;

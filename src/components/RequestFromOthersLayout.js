@@ -1,6 +1,5 @@
 import { Card, Steps } from "antd";
 import dynamic from "next/dynamic";
-import Layout from "./Layout";
 
 const PageContainer = dynamic(
   () => import("@ant-design/pro-layout").then((r) => r?.PageContainer),
@@ -9,11 +8,18 @@ const PageContainer = dynamic(
 
 const StepRequestFromOthers = ({ step = 0 }) => {
   return (
-    <div style={{ marginBottom: 16, marginTop: 16 }}>
+    <div
+      style={{
+        marginBottom: 16,
+        marginTop: 16,
+        paddingLeft: 16,
+        paddingRight: 16,
+      }}
+    >
       <Steps size="small" current={step}>
-        <Steps.Step title="Upload Document" />
-        <Steps.Step title="Add Recipients" />
-        <Steps.Step title="Finish" />
+        <Steps.Step title="Unggah dokumen" />
+        <Steps.Step title="Tambahkan Peserta" />
+        <Steps.Step title="Selesai" />
       </Steps>
     </div>
   );
@@ -21,15 +27,18 @@ const StepRequestFromOthers = ({ step = 0 }) => {
 
 function RequestFromOthersUploadLayout({ step = 0, children }) {
   return (
-    <Layout>
+    <>
       <PageContainer
-        subTitle="Workflow"
+        subTitle="Alur Pengajuan Dokumen"
         fixedHeader
-        title="Request From Others"
+        onBack={() => window.history.back()}
+        title="Permintaan kepada orang lain"
       />
-      <StepRequestFromOthers step={step} />
-      <Card>{children}</Card>
-    </Layout>
+      <div style={{ paddingLeft: 24, paddingRight: 24 }}>
+        <StepRequestFromOthers step={step} />
+        <Card>{children}</Card>
+      </div>
+    </>
   );
 }
 
