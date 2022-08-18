@@ -1,7 +1,9 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, Modal, Space } from "antd";
+import { Button, Modal, Skeleton, Space } from "antd";
 import Link from "next/link";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import documents from "../services/documents";
 
 const buttons = [
   { name: "Self Sign", path: "/uploads/self-sign/upload", disabled: false },
@@ -19,9 +21,23 @@ const buttons = [
 
 function ButtonCreate() {
   const [visible, setVisible] = useState(false);
+  const { data: status, isLoading } = useQuery(["status"], () =>
+    documents.checkStatus()
+  );
 
   const showModal = () => {
     setVisible(true);
+  };
+
+  const getListButtons = () => {
+    if (status?.message === "User tidak terdaftar dalam bsre") {
+      return buttons.map((button) => ({
+        ...button,
+        disabled: button?.name === "Self Sign" ? true : false,
+      }));
+    } else {
+      return buttons;
+    }
   };
 
   return (
@@ -33,13 +49,15 @@ function ButtonCreate() {
         onCancel={() => setVisible(false)}
         visible={visible}
       >
-        <Space>
-          {buttons?.map((b) => (
-            <Link key={b?.path} href={`${b?.path}`}>
-              <Button disabled={b?.disabled}>{b?.name}</Button>
-            </Link>
-          ))}
-        </Space>
+        <Skeleton loading={isLoading}>
+          <Space>
+            {getListButtons().map((b) => (
+              <Link key={b?.path} href={`${b?.path}`}>
+                <Button disabled={b?.disabled}>{b?.name}</Button>
+              </Link>
+            ))}
+          </Space>
+        </Skeleton>
       </Modal>
       <Button
         icon={<PlusOutlined />}
