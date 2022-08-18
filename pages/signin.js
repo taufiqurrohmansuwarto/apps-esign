@@ -1,15 +1,8 @@
-import { Button, Col, Divider, Row, Space, Typography } from "antd";
+import { Button, Col, Divider, Row, Typography } from "antd";
 import { getProviders, signIn } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 
 export default function SignIn({ providers }) {
-  const router = useRouter();
-
-  const handleCheckdocument = () => {
-    router.push("/check-document");
-  };
-
   return (
     <>
       <Row
@@ -21,7 +14,7 @@ export default function SignIn({ providers }) {
         justify="center"
       >
         <Col>
-          <Typography.Title>E-sign BKD</Typography.Title>
+          <Typography.Title>E-Sign</Typography.Title>
           {Object?.values(providers).map((provider) => (
             <div key={provider.name}>
               <Button type="primary" onClick={() => signIn(provider.id)}>
@@ -32,7 +25,7 @@ export default function SignIn({ providers }) {
           <Divider />
           <Typography.Text>
             <Link href="/check-document">
-              <a>Check document?</a>
+              <a>Ingin cek dokumen?</a>
             </Link>
           </Typography.Text>
         </Col>

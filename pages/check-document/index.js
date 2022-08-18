@@ -1,4 +1,4 @@
-import { LoadingOutlined } from "@ant-design/icons";
+import { LoadingOutlined, UploadOutlined } from "@ant-design/icons";
 import {
   Result,
   Button,
@@ -7,7 +7,12 @@ import {
   Alert,
   Divider,
   Descriptions,
+  Row,
+  Col,
+  Space,
+  Breadcrumb,
 } from "antd";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import PageContainer from "../../src/components/PageContainer";
@@ -37,7 +42,6 @@ const ResultDocument = ({ data }) => {
                 {result?.notes}
               </Descriptions.Item>
               <Descriptions.Item label="Detail">
-                {/* {JSON.stringify(result?.details)} */}
                 <ul>
                   {result?.details.map((detail) => (
                     <li key={detail.id}>
@@ -110,6 +114,7 @@ const CheckDocument = () => {
         formData.append("signed_file", file);
         const result = await documents.checkDocumentPublic(formData);
         setResult(result);
+        message.success("Dokumen berhasil diperiksa");
         setLoading(false);
         return isPdf && lt20mb ? true : Upload.LIST_IGNORE;
       }
@@ -120,35 +125,43 @@ const CheckDocument = () => {
   };
 
   return (
-    <PageContainer
-      title="Pengecekan dokumen"
-      subTitle="BKD Provinsi Jawa Timur"
-      onBack={handleBack}
-    >
-      <Alert
-        showIcon
-        type="warning"
-        message="Perlu diperhatikan"
-        description="Siapkan dokumen yang akan diupload. File harus memiliki format .pdf dan berukuran kurang dari 1 MB. Kemudian klik tombol upload dan tunggu sampai proses verifikasi selesai."
-      />
-      <Divider />
-      <Upload
-        beforeUpload={checkerFile}
-        maxCount={1}
-        accept=".pdf"
-        showUploadList={false}
-      >
-        <Button
-          type="primary"
-          icon={loading ? <LoadingOutlined /> : null}
-          disabled={loading}
-        >
-          Upload File
-        </Button>
-      </Upload>
+    <Row style={{ maxHeight: "100vh" }} justify="center" align="stretch">
+      <Col span={12}>
+        <Breadcrumb>
+          <Breadcrumb.Item>
+            <Link href="/">
+              <a>Beranda</a>
+            </Link>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>Cek Dokumen</Breadcrumb.Item>
+        </Breadcrumb>
 
-      {result && <ResultDocument data={result} />}
-    </PageContainer>
+        <Alert
+          style={{ marginTop: "20px" }}
+          showIcon
+          type="warning"
+          message="Perlu diperhatikan"
+          description="Siapkan dokumen yang akan diupload. File harus memiliki format .pdf dan berukuran kurang dari 1 MB. Kemudian klik tombol upload dan tunggu sampai proses verifikasi selesai."
+        />
+        <Divider />
+        <Upload
+          beforeUpload={checkerFile}
+          maxCount={1}
+          accept=".pdf"
+          showUploadList={false}
+        >
+          <Button
+            type="primary"
+            icon={loading ? <LoadingOutlined /> : <UploadOutlined />}
+            disabled={loading}
+          >
+            Unggah Dokumen
+          </Button>
+        </Upload>
+
+        {result && <ResultDocument data={result} />}
+      </Col>
+    </Row>
   );
 };
 

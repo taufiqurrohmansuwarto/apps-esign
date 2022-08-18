@@ -22,3 +22,15 @@ export const checkDocument = async (req, res) => {
     res.status(400).json({ code: 400, message: "Internal Server Error" });
   }
 };
+
+// coba cek status
+export const checkStatus = async (req, res) => {
+  try {
+    const { fetcher } = req;
+    const result = await fetcher.get("/status");
+    res.json(result?.data);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ code: 400, message: "Internal Server Error" });
+  }
+};
