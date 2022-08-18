@@ -34,3 +34,15 @@ export const checkStatus = async (req, res) => {
     res.status(400).json({ code: 400, message: "Internal Server Error" });
   }
 };
+
+export const getActivities = async (req, res) => {
+  try {
+    const { fetcher } = req;
+    const result = await fetcher.get("/activities");
+    console.log(result);
+    res.json(result?.data);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ code: 400, message: "Internal Server Error" });
+  }
+};

@@ -1,11 +1,16 @@
 import {
+  CheckCircleTwoTone,
+  CloseCircleOutlined,
+  CloseCircleTwoTone,
   FileDoneOutlined,
   FileSyncOutlined,
   InteractionOutlined,
   MailOutlined,
   ProfileOutlined,
   QuestionCircleOutlined,
+  VerifiedOutlined,
 } from "@ant-design/icons";
+import { useQuery } from "@tanstack/react-query";
 import {
   Avatar,
   Card,
@@ -20,7 +25,6 @@ import {
 } from "antd";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { useQuery } from "@tanstack/react-query";
 import Layout from "../src/components/Layout";
 import documents from "../src/services/documents";
 
@@ -29,7 +33,7 @@ const { Title } = Typography;
 // fucking hardcode
 const Greetings = ({ user }) => {
   return (
-    <PageHeader ghost={false} title="Dashboard">
+    <PageHeader ghost={false}>
       <Row gutter={[32, 16]}>
         <Col>
           <Avatar size={80} src={user?.image} />
@@ -48,6 +52,34 @@ const Greetings = ({ user }) => {
   );
 };
 
+const Status = ({ data, loading }) => {
+  return (
+    <Skeleton loading={loading}>
+      <Space>
+        {data?.message === "User tidak terdaftar dalam bsre" ? (
+          <>
+            <CloseCircleTwoTone twoToneColor="red" />
+            <span style={{ color: "red" }}>{data?.message}</span>
+          </>
+        ) : (
+          <>
+            <CheckCircleTwoTone twoToneColor="green" />
+            <div style={{ color: "green" }}>{data?.message}</div>
+          </>
+        )}
+      </Space>
+    </Skeleton>
+  );
+};
+
+const Dokumen = ({ title, url = "/" }) => {
+  return (
+    <Link href={url}>
+      <a>{title}</a>
+    </Link>
+  );
+};
+
 const DashboardStatistic = ({ data, loading }) => {
   return (
     <Skeleton loading={loading} active>
@@ -57,22 +89,34 @@ const DashboardStatistic = ({ data, loading }) => {
             <Col span={8}>
               <Statistic
                 prefix={<MailOutlined />}
-                title="Document Draft"
+                title={
+                  <Dokumen title="Dokumen Draft" url="/documents/list/draft" />
+                }
                 value={`${data?.draft}`}
               />
             </Col>
             <Col span={8}>
               <Statistic
-                prefix={<FileDoneOutlined />}
-                title="Document Completed"
-                value={data?.completed}
+                prefix={<FileSyncOutlined />}
+                title={
+                  <Dokumen
+                    title="Dokumen Menunggu"
+                    url="/documents/list/pending"
+                  />
+                }
+                value={data?.pending}
               />
             </Col>
             <Col span={8}>
               <Statistic
-                prefix={<FileSyncOutlined />}
-                title="Document Pending"
-                value={data?.pending}
+                prefix={<FileDoneOutlined />}
+                title={
+                  <Dokumen
+                    title="Dokumen Selesai"
+                    url="/documents/list/completed"
+                  />
+                }
+                value={data?.completed}
               />
             </Col>
           </Row>
@@ -84,13 +128,22 @@ const DashboardStatistic = ({ data, loading }) => {
 
 const Dashboard = () => {
   const { data } = useSession();
-  const { data: dashboardData, isLoading } = useQuery("dashboard", () =>
+  const { data: dashboardData, isLoading } = useQuery(["dashboard"], () =>
     documents.getDashboard()
   );
+
+  const { data: status, isLoading: isLoadingStatus } = useQuery(
+    ["status"],
+    () => documents.checkStatus()
+  );
+
   return (
     <Layout>
       <Card>
         <Greetings user={data?.user} />
+        <Divider />
+        <Typography.Title level={5}>Status</Typography.Title>
+        <Status data={status} loading={isLoadingStatus} />
         <Divider />
         <DashboardStatistic loading={isLoading} data={dashboardData?.data} />
         <Divider />
@@ -100,7 +153,7 @@ const Dashboard = () => {
               <Space>
                 <Link href="/documents/list/all">
                   <a>
-                    <ProfileOutlined /> View All Document
+                    <ProfileOutlined /> Lihat Semua dokumen
                   </a>
                 </Link>
               </Space>
@@ -109,7 +162,7 @@ const Dashboard = () => {
               <Space>
                 <Link href="/settings/activity-log">
                   <a>
-                    <InteractionOutlined /> Activities
+                    <InteractionOutlined /> Aktivitas
                   </a>
                 </Link>
               </Space>
@@ -118,7 +171,7 @@ const Dashboard = () => {
               <Link href="/settings/signature">
                 <a>
                   <Space>
-                    <FileDoneOutlined /> Signature
+                    <FileDoneOutlined /> Stempel
                   </Space>
                 </a>
               </Link>
@@ -127,7 +180,7 @@ const Dashboard = () => {
               <Link href="/settings/faq">
                 <a>
                   <Space>
-                    <QuestionCircleOutlined /> Need Help?
+                    <QuestionCircleOutlined /> Butuh bantuan?
                   </Space>
                 </a>
               </Link>

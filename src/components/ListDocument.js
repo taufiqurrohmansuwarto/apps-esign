@@ -22,7 +22,7 @@ import { capitalize, startCase } from "lodash";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useState } from "react";
-import { useQuery } from "@tansack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import documents from "../services/documents";
 import { documentStatus, recipientStatus } from "../utils";
 
@@ -146,7 +146,6 @@ const ListDocuments = ({ type = "all" }) => {
           setQuery({ ...query, ...currentParams });
         }}
         dataSource={data?.data?.list}
-        loading={isLoading}
         size="small"
         metas={{
           title: {

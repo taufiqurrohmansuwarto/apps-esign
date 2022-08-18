@@ -110,10 +110,15 @@ const checkDocumentPublic = (data) => {
 };
 
 const checkStatus = () => {
-  return esignFetcher.get("/status").then((res) => res?.data);
+  return esignFetcher.get("/check/status").then((res) => res?.data);
+};
+
+const getActivities = () => {
+  return esignFetcher.get("/activities").then((res) => res.data);
 };
 
 export default {
+  getActivities,
   checkStatus,
   download,
   getStamps,

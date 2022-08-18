@@ -1,7 +1,20 @@
+import { Card } from "antd";
+import { useQuery } from "@tanstack/react-query";
 import SettingLayout from "../../src/components/SettingLayout";
+import documents from "../../src/services/documents";
 
 const Activity = () => {
-  return <SettingLayout>History</SettingLayout>;
+  const { data, isLoading } = useQuery(["activities"], () =>
+    documents.getActivities()
+  );
+
+  return (
+    <SettingLayout>
+      <Card loading={isLoading}>
+        <div>{JSON.stringify(data)}</div>
+      </Card>
+    </SettingLayout>
+  );
 };
 
 Activity.auth = {
