@@ -39,7 +39,6 @@ export const getActivities = async (req, res) => {
   try {
     const { fetcher } = req;
     const result = await fetcher.get("/activities");
-    console.log(result);
     res.json(result?.data);
   } catch (error) {
     console.log(error);

@@ -9,22 +9,22 @@ export default {
   routes: [
     {
       path: "/settings/personal-information",
-      name: "Personal Information",
+      name: "Informasi Akun",
       icon: <UnorderedListOutlined />,
     },
     {
       path: "/settings/activity-log",
-      name: "Activities",
+      name: "Aktivitas",
       icon: <FolderOpenOutlined />,
     },
     {
       path: "/settings/faq",
-      name: "FAQ",
+      name: "Pertanyaan",
       icon: <ClockCircleOutlined />,
     },
     {
       path: "/settings/signatures",
-      name: "Signature",
+      name: "Stempel",
       icon: <CheckSquareOutlined />,
     },
   ],

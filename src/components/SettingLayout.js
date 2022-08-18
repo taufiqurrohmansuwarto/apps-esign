@@ -84,7 +84,6 @@ function SettingLayout({ children, title = "E-SIGN" }) {
         collapsed={false}
         route={settingsRoutes}
         menuItemRender={menuItemRender}
-        menuHeaderRender={false}
         selectedKeys={[router?.pathname]}
       >
         {children}
