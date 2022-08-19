@@ -23,7 +23,6 @@ import {
 } from "antd";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import useGeolocation from "react-hook-geolocation";
 import Layout from "../src/components/Layout";
 import documents from "../src/services/documents";
 

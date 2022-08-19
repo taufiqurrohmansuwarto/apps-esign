@@ -14,7 +14,12 @@ router
 
     res
       .status(200)
-      .json({ fingerprint: req?.fingerprint, ip, ipInf: req?.ipInfo });
+      .json({
+        fingerprint: req?.fingerprint,
+        ip,
+        ipInf: req?.ipInfo,
+        helo: "world",
+      });
   });
 
 export default router.handler();
