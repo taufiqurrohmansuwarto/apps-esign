@@ -1,9 +1,9 @@
 import multer from "multer";
-import nc from "next-connect";
+import { createRouter } from "next-connect";
 import { uploadDocument } from "../../controller/document-properties.controller";
 import auth from "../../middleware/auth";
 
-const handler = nc();
+const router = createRouter();
 
 export const config = {
   api: {
@@ -11,6 +11,6 @@ export const config = {
   },
 };
 
-export default handler
-  .use(auth)
-  .post(multer().single("document"), uploadDocument);
+router.use(auth).post(multer().single("document"), uploadDocument);
+
+export default router.handler({});

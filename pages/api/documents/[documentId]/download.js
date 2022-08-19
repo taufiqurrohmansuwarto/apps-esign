@@ -1,6 +1,6 @@
 import axios from "axios";
-import nc from "next-connect";
-const handler = nc();
+import { createRouter } from "next-connect";
+const handler = createRouter();
 
 const url = "http://www.africau.edu/images/default/sample.pdf";
 

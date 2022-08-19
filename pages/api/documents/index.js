@@ -1,6 +1,6 @@
-import nc from "next-connect";
+import { createRouter } from "next-connect";
 import auth from "../../../middleware/auth";
 import { listDocuments } from "../.././../controller/document-properties.controller";
-const handler = nc();
+const handler = createRouter();
 
 export default handler.use(auth).get(listDocuments);

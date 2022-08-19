@@ -1,4 +1,4 @@
-import nc from "next-connect";
+import { createRouter } from "next-connect";
 import { checkDocument } from "../../../controller/public.controller";
 import multer from "multer";
 
@@ -8,6 +8,8 @@ export const config = {
   },
 };
 
-const handler = nc();
+const router = createRouter();
 
-export default handler.post(multer().single("signed_file"), checkDocument);
+router.post(multer().single("signed_file"), checkDocument);
+
+export default router.handler();
