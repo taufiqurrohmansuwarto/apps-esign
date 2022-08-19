@@ -10,7 +10,9 @@ router
   .use(expressCompression)
   .use(expressFingerPrint)
   .get((req, res) => {
-    res.status(200).json(req?.fingerprint);
+    var ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+
+    res.status(200).json({ fingerprint: req?.fingerprint, ip });
   });
 
 export default router.handler();
