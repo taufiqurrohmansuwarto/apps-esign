@@ -79,11 +79,13 @@ const getDashboard = () => {
 };
 
 const upload = (data) => {
-  return esignFetcher.post("/uploads", data, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  return esignFetcher
+    .post("/uploads", data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then((res) => res?.data);
 };
 
 const checkDocument = (documentId) => {

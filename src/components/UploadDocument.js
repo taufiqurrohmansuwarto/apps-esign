@@ -41,10 +41,10 @@ const UploadDocument = ({ type = "selfSign" }) => {
           currentType = "sign-and-share";
         }
 
+        console.log(document);
+
         setLoadingSubmit(false);
-        router.push(
-          `/uploads/${currentType}/sign?documentId=${document?.data?.document?.id}`
-        );
+        router.push(`/uploads/${currentType}/sign?documentId=${document.id}`);
       }
     } catch (error) {
       setLoadingSubmit(false);

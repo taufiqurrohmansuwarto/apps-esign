@@ -207,7 +207,8 @@ export const uploadDocument = async (req, res) => {
     formData.append("title", title);
     formData.append("document", file?.buffer, `${title}?.pdf`);
     const result = await uploadBackend(req.fetcher, formData);
-    res.json(result?.data);
+    const [hasil] = result?.data;
+    res.json(hasil);
   } catch (error) {
     console.log(error);
     res.status(400).json({ code: 400, message: "Internal Server Error" });
