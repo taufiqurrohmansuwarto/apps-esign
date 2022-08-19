@@ -1,8 +1,11 @@
 import { expressWrapper } from "next-connect";
+
 const compression = require("compression");
 const FingerPrint = require("express-fingerprint");
+const expressIp = require("express-ip");
 
 export const expressCompression = expressWrapper(compression());
+
 export const expressFingerPrint = expressWrapper(
   FingerPrint({
     parameters: [
@@ -12,3 +15,5 @@ export const expressFingerPrint = expressWrapper(
     ],
   })
 );
+
+export const expressIp = expressWrapper(expressIp);

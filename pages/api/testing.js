@@ -12,7 +12,9 @@ router
   .get((req, res) => {
     var ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
 
-    res.status(200).json({ fingerprint: req?.fingerprint, ip });
+    res
+      .status(200)
+      .json({ fingerprint: req?.fingerprint, ip, ipInf: req?.ipInfo });
   });
 
 export default router.handler();

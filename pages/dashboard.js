@@ -126,7 +126,6 @@ const DashboardStatistic = ({ data, loading }) => {
 };
 
 const Dashboard = () => {
-  const geoLocation = useGeolocation();
   const { data } = useSession();
   const { data: dashboardData, isLoading } = useQuery(["dashboard"], () =>
     documents.getDashboard()
@@ -141,7 +140,6 @@ const Dashboard = () => {
     <Card>
       <Greetings user={data?.user} />
       <Divider />
-      {JSON.stringify(geoLocation)}
       <Typography.Title level={5}>Status</Typography.Title>
       <Status data={status} loading={isLoadingStatus} />
       <Divider />
