@@ -1,6 +1,7 @@
 import { createRouter } from "next-connect";
 import { getActivities } from "../../controller/public.controller";
 import auth from "../../middleware/auth";
-const handler = createRouter();
+const router = createRouter();
 
-export default handler.use(auth).get(getActivities);
+router.use(auth).get(getActivities);
+export default router.handler();

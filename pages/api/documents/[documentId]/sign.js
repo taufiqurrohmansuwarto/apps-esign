@@ -3,6 +3,8 @@
 import { createRouter } from "next-connect";
 import { approveSign } from "../../../../controller/document-properties.controller";
 import auth from "../../../../middleware/auth";
-const handler = createRouter();
+const router = createRouter();
 
-export default handler.use(auth).put(approveSign);
+router.use(auth).put(approveSign);
+
+export default router.handler();

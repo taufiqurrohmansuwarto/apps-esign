@@ -4,6 +4,8 @@ import {
   getListRecipients,
 } from "../../../../controller/document-properties.controller";
 import auth from "../../../../middleware/auth";
-const handler = createRouter();
+const router = createRouter();
 
-export default handler.use(auth).get(getListRecipients).post(createRecipients);
+router.use(auth).get(getListRecipients).post(createRecipients);
+
+export default router.handler();

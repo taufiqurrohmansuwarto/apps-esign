@@ -1,6 +1,8 @@
 import { createRouter } from "next-connect";
 import { documentDetail } from "../../../../controller/document-properties.controller";
 import auth from "../../../../middleware/auth";
-const handler = createRouter();
+const router = createRouter();
 
-export default handler.use(auth).get(documentDetail);
+router.use(auth).get(documentDetail);
+
+export default router.handler();

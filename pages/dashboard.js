@@ -1,11 +1,12 @@
 import {
-  CheckCircleTwoTone, CloseCircleTwoTone,
+  CheckCircleTwoTone,
+  CloseCircleTwoTone,
   FileDoneOutlined,
   FileSyncOutlined,
   InteractionOutlined,
   MailOutlined,
   ProfileOutlined,
-  QuestionCircleOutlined
+  QuestionCircleOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -18,10 +19,11 @@ import {
   Skeleton,
   Space,
   Statistic,
-  Typography
+  Typography,
 } from "antd";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import useGeolocation from "react-hook-geolocation";
 import Layout from "../src/components/Layout";
 import documents from "../src/services/documents";
 
@@ -124,6 +126,7 @@ const DashboardStatistic = ({ data, loading }) => {
 };
 
 const Dashboard = () => {
+  const geoLocation = useGeolocation();
   const { data } = useSession();
   const { data: dashboardData, isLoading } = useQuery(["dashboard"], () =>
     documents.getDashboard()
@@ -138,6 +141,7 @@ const Dashboard = () => {
     <Card>
       <Greetings user={data?.user} />
       <Divider />
+      {JSON.stringify(geoLocation)}
       <Typography.Title level={5}>Status</Typography.Title>
       <Status data={status} loading={isLoadingStatus} />
       <Divider />

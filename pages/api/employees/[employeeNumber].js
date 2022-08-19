@@ -2,6 +2,8 @@ import { createRouter } from "next-connect";
 import { findEmployee } from "../../../controller/document-properties.controller";
 import auth from "../../../middleware/auth";
 
-const handler = createRouter();
+const router = createRouter();
 
-export default handler.use(auth).get(findEmployee);
+router.use(auth).get(findEmployee);
+
+export default router.handler();
