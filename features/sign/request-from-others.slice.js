@@ -9,7 +9,6 @@ export const fetchDocuments = createAsyncThunk(
     const { data: document, ...documentData } = result;
 
     const hasil = { document, documentData };
-    console.log(hasil);
     return hasil;
   }
 );
@@ -32,12 +31,17 @@ export const shareSignSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchDocuments.fulfilled, (state, { payload }) => {
+      state.loading = "idle";
       state.docUrl = payload.document;
       state.documentData = payload.documentData;
 
       state.dataUser = [];
       state.dataSign = [];
       state.dataSignFilter = [];
+    });
+
+    builder.addCase(fetchDocuments.pending, (state) => {
+      state.loading = "loading";
     });
   },
   reducers: {

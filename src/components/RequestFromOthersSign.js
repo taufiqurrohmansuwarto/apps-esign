@@ -1,9 +1,9 @@
 import {
+  Button,
   Card,
   Col,
   Input,
   InputNumber,
-  message,
   Modal,
   Pagination,
   Row,
@@ -12,7 +12,6 @@ import {
 } from "antd";
 import { useRef, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
-import currentDocuments from "../services/documents";
 import ShareAndRequest from "./ShareAndRequest";
 import SignMove from "./SignMoveMultiple";
 
@@ -27,6 +26,9 @@ const PdfDocument = ({
   dataSignFilter,
   updateFrame,
   removeSign,
+  currentPage,
+  totalPage,
+  onChangePage,
 }) => {
   const onLoadDocumentSucces = ({ numPages }) => {
     changePageDocument({ currentPage: 1, totalPage: numPages });
@@ -48,44 +50,78 @@ const PdfDocument = ({
     <div
       style={{
         width: "100%",
-        height: "86vh",
+        height: "76vh",
         overflowY: "scroll",
         boxSizing: "content-box",
         padding: "0px 10px",
+        // position: "relative",
       }}
     >
-      <Row justify="center">
-        <Col>
-          <div ref={ref} style={{ position: "relative" }}>
-            {dataSignFilter.map((sign) => (
-              <SignMove
-                currentRef={ref.current}
-                frame={sign.frame}
-                key={sign.id}
-                id={sign.id}
-                bounds={{
-                  height: documentProperty.height,
-                  width: documentProperty.width,
-                }}
-                images={sign.stamp}
-                updateFrame={updateFrame}
-                removeSign={removeSign}
-              />
-            ))}
-            <Document
-              file={`data:application/pdf;base64,${docUrl}`}
-              onLoadSuccess={onLoadDocumentSucces}
-            >
-              <Page
-                onLoadSuccess={onLoadPageSuccess}
-                renderTextLayer={false}
-                scale={1}
-                pageNumber={documents.currentPage}
-              />
-            </Document>
-          </div>
-        </Col>
-      </Row>
+      <>
+        <div
+          style={{
+            position: "fixed",
+            right: "4rem",
+            marginTop: 10,
+            zIndex: 10,
+          }}
+        >
+          <ShareAndRequest />
+        </div>
+        <div
+          style={{
+            position: "fixed",
+            right: "4rem",
+            bottom: "4rem",
+            marginTop: 10,
+            zIndex: 10,
+            backgroundColor: "white",
+            padding: 10,
+            borderRadius: 5,
+          }}
+        >
+          <Pagination
+            size="small"
+            current={currentPage}
+            onChange={onChangePage}
+            total={totalPage}
+            simple
+            defaultPageSize={1}
+          />
+        </div>
+        <Row justify="center">
+          <Col>
+            <div ref={ref} style={{ position: "relative" }}>
+              {dataSignFilter.map((sign) => (
+                <SignMove
+                  currentRef={ref.current}
+                  frame={sign.frame}
+                  key={sign.id}
+                  id={sign.id}
+                  bounds={{
+                    height: documentProperty.height,
+                    width: documentProperty.width,
+                  }}
+                  images={sign.stamp}
+                  updateFrame={updateFrame}
+                  removeSign={removeSign}
+                />
+              ))}
+              <Document
+                file={`data:application/pdf;base64,${docUrl}`}
+                onLoadSuccess={onLoadDocumentSucces}
+              >
+                <Page
+                  onLoadSuccess={onLoadPageSuccess}
+                  renderTextLayer={false}
+                  scale={1}
+                  pageNumber={documents.currentPage}
+                />
+              </Document>
+            </div>
+          </Col>
+        </Row>
+      </>
     </div>
   );
 };
@@ -97,53 +133,24 @@ const RequestFromOthersSign = function ({
   signSymbol,
   documentProperty,
   dataSignFilter,
-  dataSign,
   changePageDocument,
   loadPageSuccess,
   documents,
   changePagination,
   updateFrame,
-  documentData,
   removeSign,
 }) {
   const [open, setOpen] = useState(false);
-  const [document, setDocument] = useState(null);
   const [otp, setOtp] = useState("");
   const [reason, setReason] = useState("I approve this document");
 
-  const onSubmit = async () => {
-    try {
-      const { id } = documentData;
-      const properties = dataSign.map((sign) => {
-        const { frame, page } = sign;
-        const [x, y] = frame.translate;
-        const { height, width } = frame;
-
-        const xPos = x < 0 ? 0 : x;
-        const yPos = y < 0 ? 0 : y;
-
-        return {
-          xPos,
-          yPos,
-          height,
-          width,
-          page,
-        };
-      });
-
-      const data = { documentId: id, properties };
-      console.log(data);
-      const result = await currentDocuments.approveDocument(data?.documentId, {
-        properties,
-      });
-    } catch (error) {
-      message.error("hello");
-    }
-  };
-
   if (loading == "loading") {
     return (
-      <Row justify="center" align="middle" style={{ padding: 18 }}>
+      <Row
+        justify="center"
+        align="middle"
+        style={{ padding: 18, backgroundColor: "GrayText" }}
+      >
         <Card style={{ width: 600, height: 800 }}>
           <Skeleton avatar={{ size: 100 }} active />
           <Skeleton paragraph active />
@@ -170,12 +177,11 @@ const RequestFromOthersSign = function ({
         closable={false}
         onOk={() => {}}
         maskClosable={false}
-        // confirmLoading={signDocumentRequest.loading}
         onCancel={() => {
           setOpen(false);
         }}
       >
-        <p>We already sent code verification to your email. Please verify.</p>
+        <p>Masukkan passphrase anda</p>
         <InputNumber
           placeholder="OTP Number"
           value={otp}
@@ -187,23 +193,11 @@ const RequestFromOthersSign = function ({
           onChange={(e) => setReason(e.target.value)}
         />
       </Modal>
-      <div style={{ padding: 5 }}>
-        <Row justify="center">
-          <Space>
-            <ShareAndRequest />
-            <Pagination
-              simple
-              current={documents.currentPage}
-              total={documents.totalPage}
-              defaultPageSize={1}
-              size="small"
-              onChange={changePagination}
-            />
-          </Space>
-        </Row>
-      </div>
       <div>
-        <Row justify="center" style={{ zIndex: 1 }}>
+        <Row
+          justify="center"
+          style={{ zIndex: 1, backgroundColor: "grayText" }}
+        >
           <Col span={24}>
             <div
               style={{
@@ -216,6 +210,10 @@ const RequestFromOthersSign = function ({
               {loading === "idle" && docUrl && (
                 <PdfDocument
                   docUrl={docUrl}
+                  // paging
+                  currentPage={documents.currentPage}
+                  totalPage={documents.totalPage}
+                  onChangePage={changePagination}
                   loadPageSuccess={loadPageSuccess}
                   changePageDocument={changePageDocument}
                   documents={documents}

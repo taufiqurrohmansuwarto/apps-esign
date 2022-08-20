@@ -1,4 +1,5 @@
 import { expressWrapper } from "next-connect";
+import auth from "./auth";
 
 const compression = require("compression");
 const FingerPrint = require("express-fingerprint");
@@ -17,3 +18,10 @@ export const expressFingerPrint = expressWrapper(
 );
 
 export const expressIp = expressWrapper(ip().getIpInfoMiddleware);
+
+export const authWithIp = [
+  expressFingerPrint,
+  expressIp,
+  expressCompression,
+  auth,
+];

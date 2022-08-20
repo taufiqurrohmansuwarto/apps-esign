@@ -16,6 +16,6 @@ export default async (req, res, next) => {
     req.fetcher = fetcher;
     next();
   } else {
-    res.status(401).json({ code: 404, message: "not authorized" });
+    res.status(401).json({ code: 401, message: "No Token" });
   }
 };

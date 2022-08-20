@@ -130,7 +130,7 @@ const ShareAndRequest = () => {
     try {
       setUser(employeeData);
     } catch (error) {
-      message.error("Hmmmmm... theres something error");
+      message.error("Hmmmmm... theres something error", error);
     }
   };
 
@@ -208,7 +208,6 @@ const ShareAndRequest = () => {
       const data = { documentId, data: currentDataPost };
       await recipientsMutation.mutateAsync(data);
       router.push(`/documents/${documentId}/view`);
-      // send this to backend server
     }
   };
 
@@ -219,7 +218,7 @@ const ShareAndRequest = () => {
         onClick={() => setShowDrawer(true)}
         type="primary"
       >
-        Recipients
+        Peserta
       </Button>
       <Drawer
         width={800}

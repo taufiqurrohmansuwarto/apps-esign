@@ -1,26 +1,28 @@
-import { LoadingOutlined, UploadOutlined } from "@ant-design/icons";
 import {
-  Result,
-  Button,
-  message,
-  Upload,
+  LoadingOutlined,
+  SearchOutlined,
+  UploadOutlined,
+} from "@ant-design/icons";
+import {
   Alert,
-  Divider,
-  Descriptions,
-  Row,
-  Col,
-  Space,
   Breadcrumb,
+  Button,
+  Col,
+  Descriptions,
+  Divider,
+  message,
+  Modal,
+  Result,
+  Row,
+  Upload,
 } from "antd";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useState } from "react";
-import PageContainer from "../../src/components/PageContainer";
 import documents from "../../src/services/documents";
 
-const MAX_FILE_SIZE = 1;
+const MAX_FILE_SIZE = 20;
 
-const ResultDocument = ({ data }) => {
+const ResultDocument = ({ data, openModal }) => {
   const [result] = data;
 
   if (result?.summary !== null) {
@@ -54,6 +56,15 @@ const ResultDocument = ({ data }) => {
                   ))}
                 </ul>
               </Descriptions.Item>
+              <Descriptions.Item>
+                <Button
+                  icon={<SearchOutlined />}
+                  type="primary"
+                  onClick={openModal}
+                >
+                  Lihat File
+                </Button>
+              </Descriptions.Item>
             </Descriptions>
           </>
         }
@@ -80,6 +91,15 @@ const ResultDocument = ({ data }) => {
               <Descriptions.Item label="Detail">
                 {JSON.stringify(result?.details)}
               </Descriptions.Item>
+              <Descriptions.Item>
+                {/* <Button
+                  icon={<SearchOutlined />}
+                  type="primary"
+                  onClick={openModal}
+                >
+                  Lihat File
+                </Button> */}
+              </Descriptions.Item>
             </Descriptions>
           </>
         }
@@ -88,16 +108,47 @@ const ResultDocument = ({ data }) => {
   }
 };
 
+const ModalViewPdf = ({ visible, onCancel, fileUrl }) => {
+  const HEIGHT = 800;
+  const WIDTH = 600;
+  return (
+    <Modal
+      cancelText="Tutup"
+      title="Detail PDF"
+      width={WIDTH + 200}
+      centered
+      visible={visible}
+      onCancel={onCancel}
+    >
+      <object
+        data={fileUrl}
+        height={HEIGHT}
+        width={WIDTH + 150}
+        type="application/pdf"
+      ></object>
+    </Modal>
+  );
+};
+
+const getBase64 = (img, callback) => {
+  const reader = new FileReader();
+  reader.addEventListener("load", () => callback(reader.result));
+  reader.readAsDataURL(img);
+};
+
 const CheckDocument = () => {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
-  const router = useRouter();
+  const [fileUrl, setFileUrl] = useState(null);
 
-  const handleBack = () => router.push("/");
+  const [showModal, setShowModal] = useState(false);
+  const cancelModal = () => setShowModal(false);
+  const openModal = () => setShowModal(true);
 
   const checkerFile = async (file) => {
     setLoading(true);
     setResult(null);
+    setFileUrl(null);
     try {
       const { type, size } = file;
       const lt20mb = size / 1024 / 1024 < MAX_FILE_SIZE;
@@ -116,10 +167,15 @@ const CheckDocument = () => {
         setResult(result);
         message.success("Dokumen berhasil diperiksa");
         setLoading(false);
+        getBase64(file, (url) => {
+          setFileUrl(url);
+        });
         return isPdf && lt20mb ? true : Upload.LIST_IGNORE;
       }
     } catch (error) {
       setLoading(false);
+      setResult(null);
+      setFileUrl(null);
       message.error(error);
     }
   };
@@ -127,6 +183,11 @@ const CheckDocument = () => {
   return (
     <Row style={{ maxHeight: "100vh" }} justify="center" align="stretch">
       <Col span={12}>
+        <ModalViewPdf
+          fileUrl={fileUrl}
+          visible={showModal}
+          onCancel={cancelModal}
+        />
         <Breadcrumb>
           <Breadcrumb.Item>
             <Link href="/">
@@ -159,7 +220,7 @@ const CheckDocument = () => {
           </Button>
         </Upload>
 
-        {result && <ResultDocument data={result} />}
+        {result && <ResultDocument openModal={openModal} data={result} />}
       </Col>
     </Row>
   );
