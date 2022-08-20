@@ -72,34 +72,46 @@ export default function ({
   };
 
   return (
-    <div>
-      <div style={{ overflowY: "scroll", height: "79vh" }}>
-        <ButtonHandler />
-        <Skeleton loading={isLoading}>
-          <Row justify="center">
-            <Col>
-              <div style={{ position: "relative" }}>
-                <Document
-                  file={`data:application/pdf;base64,${data?.data}`}
-                  onLoadSuccess={onDocumentLoadSuccess}
-                >
-                  {Array.from(new Array(numPages), (el, index) => (
-                    <div key={`page_${index}`} style={{ padding: 18 }}>
-                      <Page
-                        scale={1.2}
-                        renderTextLayer={false}
-                        renderMode="canvas"
-                        renderAnnotationLayer={false}
-                        pageNumber={index + 1}
-                      />
-                    </div>
-                  ))}
-                </Document>
-              </div>
-            </Col>
-          </Row>
-        </Skeleton>
-      </div>
-    </div>
+    <Row justify="center" style={{ zIndex: 1, backgroundColor: "grayText" }}>
+      <Col span={24}>
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            overflow: "hidden",
+            textAlign: "center",
+          }}
+        >
+          <div
+            style={{
+              width: "100%",
+              height: "70vh",
+              overflowY: "scroll",
+              boxSizing: "content-box",
+              padding: "0px 10px",
+            }}
+          >
+            <Row justify="center">
+              <Document
+                file={`data:application/pdf;base64,${data?.data}`}
+                onLoadSuccess={onDocumentLoadSuccess}
+              >
+                {Array.from(new Array(numPages), (el, index) => (
+                  <div key={`page_${index}`} style={{ padding: 18 }}>
+                    <Page
+                      scale={1.2}
+                      renderTextLayer={false}
+                      renderMode="canvas"
+                      renderAnnotationLayer={false}
+                      pageNumber={index + 1}
+                    />
+                  </div>
+                ))}
+              </Document>
+            </Row>
+          </div>
+        </div>
+      </Col>
+    </Row>
   );
 }

@@ -1,3 +1,4 @@
+import { toString } from "lodash";
 import { getSession } from "next-auth/react";
 import DetailDocumentLayout from "../../../src/components/DetailDocumentLayout";
 import DocumentFinishOrWaiting from "../../../src/components/DocumentFinishOrWaiting";
@@ -17,26 +18,26 @@ const MainDocument = ({ document }) => {
   const currentUserId = splitId(user?.id);
   const owner = recipients?.find((recipient) => recipient?.is_owner);
   const currentUser = recipients.find(
-    (recipient) => recipient?.employee_id === currentUserId
+    (recipient) => toString(recipient?.employee_id) === toString(currentUserId)
   );
 
   // fucking not finished
   const workflowSelfSignNotFinisihed =
     workflow === "selfSign" &&
-    owner?.employee_id === parseInt(currentUserId, 10) &&
+    toString(owner?.employee_id) === toString(currentUserId) &&
     owner?.status === "draft";
 
   const workflowRequestFromOthersNotFinisihed =
     workflow === "requestFromOthers" &&
-    owner?.employee_id === currentUserId &&
-    owner.role === null;
+    toString(owner?.employee_id) === toString(currentUserId) &&
+    owner?.status === "draft";
 
-  const reviewerNotFinished =
+  const requestFromOthersReviewerNotFinished =
     workflow === "requestFromOthers" &&
     currentUser?.role === "reviewer" &&
     currentUser?.signatory_status === "";
 
-  const signerNotFinished =
+  const requestFromOthersSignNotFinished =
     workflow === "requestFromOthers" &&
     currentUser?.role === "signer" &&
     currentUser?.signatory_status === "";
@@ -45,29 +46,18 @@ const MainDocument = ({ document }) => {
     signOrNot = "initial";
   } else if (workflowRequestFromOthersNotFinisihed) {
     signOrNot = "initial";
-  } else if (!workflowSelfSignNotFinisihed) {
-    signOrNot = "sign";
   }
 
   // return <DocumentFinishOrWaiting id={id} />;
+
+  // return <div>{JSON.stringify(recipients)}</div>;
 
   if (workflowSelfSignNotFinisihed) {
     return <MailSelfSign id={id} />;
   } else if (workflowRequestFromOthersNotFinisihed) {
     return <MainRequestFromOthersSign id={id} />;
-  } else if (!workflowSelfSignNotFinisihed) {
-    return <DocumentFinishOrWaiting id={id} type={signOrNot} />;
   } else {
-    return (
-      <div>
-        {/* {JSON.stringify(user)} */}
-        {/* {JSON.stringify(currentUserId)} */}
-        {/* {JSON.stringify(owner)} */}
-        {/* {JSON.stringify(currentUser)} */}
-        {/* {JSON.stringify(recipients)} */}
-        <DocumentFinishOrWaiting id={id} />
-      </div>
-    );
+    return <DocumentFinishOrWaiting id={id} />;
   }
 };
 

@@ -49,7 +49,7 @@ const PdfDocument = ({
     <div
       style={{
         width: "100%",
-        height: "76vh",
+        height: "72vh",
         overflowY: "scroll",
         boxSizing: "content-box",
         padding: "0px 10px",

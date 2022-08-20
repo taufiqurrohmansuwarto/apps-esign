@@ -251,7 +251,7 @@ const ShareAndRequest = () => {
           style={{ marginBottom: 20 }}
           type="warning"
           showIcon
-          description="Dokumen akan diproses secara urut berdasarkan daftar pegawai yang diinputkan. Pastikan pegawai yang melakukan TTE adalah pegawai yang sudah terdaftar di sistem BSrE"
+          description="Dokumen akan diproses secara urut berdasarkan daftar pegawai yang diinputkan"
         />
         <Select
           style={{ width: "80%" }}
