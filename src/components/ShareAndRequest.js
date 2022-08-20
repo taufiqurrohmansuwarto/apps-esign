@@ -1,6 +1,11 @@
-import { DeleteOutlined, PlusCircleFilled } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  PlusCircleFilled,
+  PlusOutlined,
+} from "@ant-design/icons";
 import { useDebounce } from "@umijs/hooks";
 import {
+  Alert,
   Avatar,
   Button,
   Drawer,
@@ -32,7 +37,6 @@ const ListRecipients = ({
 }) => {
   return (
     <List
-      size="small"
       itemLayout="horizontal"
       dataSource={recipients}
       renderItem={(item) => (
@@ -50,7 +54,12 @@ const ListRecipients = ({
               onChange={() => handleChangeRole(item.id)}
             >
               <Radio.Button value={"reviewer"}>Reviewer</Radio.Button>
-              <Radio.Button value={"signer"}>Signer</Radio.Button>
+              <Radio.Button
+                value={"signer"}
+                disabled={item?.status === "NOT_REGISTERED"}
+              >
+                Signer
+              </Radio.Button>
             </Radio.Group>,
             <div>
               {item?.role === "signer" && (
@@ -69,7 +78,7 @@ const ListRecipients = ({
                   size="small"
                   type="primary"
                 >
-                  sign
+                  SIGN
                 </Button>
               )}
             </div>,
@@ -78,7 +87,7 @@ const ListRecipients = ({
           <List.Item.Meta
             avatar={<Avatar src={item?.fileDiri?.foto} />}
             title={`${item?.nama} (${item?.role})`}
-            description={item?.nip}
+            description={item?.jabatan}
           />
         </List.Item>
       )}
@@ -89,8 +98,8 @@ const ListRecipients = ({
 const ShareAndRequest = () => {
   const data = useSelector((state) => state.requestFromOthers);
   const dispatch = useDispatch();
-  const [searching, setSearching] = useState(undefined);
-  const debouncFilter = useDebounce(searching, 500);
+  const [searching, setSearching] = useState("");
+  const debouncFilter = useDebounce(searching, 800);
   const [user, setUser] = useState(undefined);
 
   const [showDrawer, setShowDrawer] = useState(false);
@@ -119,10 +128,14 @@ const ShareAndRequest = () => {
     dispatch(addSigntoSigner(data));
   };
 
-  const { data: employeeData, isLoading: loadingEmployee } = useQuery(
+  const {
+    data: employeeData,
+    isLoading: loadingEmployee,
+    isFetching,
+  } = useQuery(
     ["employees", debouncFilter],
     () => documents.findEmployee(debouncFilter),
-    { enabled: Boolean(debouncFilter) }
+    { enabled: Boolean(debouncFilter), refetchOnWindowFocus: false }
   );
 
   // this fucking multiple request like shit
@@ -221,24 +234,32 @@ const ShareAndRequest = () => {
         Peserta
       </Button>
       <Drawer
-        width={800}
+        title="Peserta pada dokumen"
+        width={750}
         visible={showDrawer}
         onClose={() => setShowDrawer(false)}
         extra={
           <Space>
+            <Button onClick={() => setShowDrawer(false)}>Batal</Button>
             <Button type="primary" onClick={handleSubmit}>
               Submit
             </Button>
           </Space>
         }
       >
+        <Alert
+          style={{ marginBottom: 20 }}
+          type="warning"
+          showIcon
+          description="Dokumen akan diproses secara urut berdasarkan daftar pegawai yang diinputkan. Pastikan pegawai yang melakukan TTE adalah pegawai yang sudah terdaftar di sistem BSrE"
+        />
         <Select
-          size="small"
           style={{ width: "80%" }}
-          placeholder="Employee number"
+          placeholder="Masukkan NIP"
           defaultActiveFirstOption={false}
           showSearch
-          notFoundContent={loadingEmployee ? <Spin size="small" /> : null}
+          allowClear
+          notFoundContent={isFetching ? <Spin size="small" /> : null}
           loading={loadingEmployee}
           showArrow={false}
           filterOption={false}
@@ -246,7 +267,7 @@ const ShareAndRequest = () => {
           onChange={handleChange}
         >
           {!isEmpty(employeeData) && (
-            <Select.Option key={employeeData?.nip}>
+            <Select.Option key={employeeData?.nip} value={employeeData?.nip}>
               <Space>
                 {employeeData.nama} - {employeeData.nip}
               </Space>
@@ -254,14 +275,16 @@ const ShareAndRequest = () => {
           )}
         </Select>
         <Button
-          size="small"
+          icon={<PlusCircleFilled />}
+          type="primary"
           onClick={() => dispatch(addRecipients(user))}
           disabled={loadingEmployee || !employeeData}
+          style={{ marginLeft: "1rem" }}
         >
-          Add
+          Peserta
         </Button>
         {data?.dataUser.length ? (
-          <div style={{ width: "70%" }}>
+          <div>
             <ListRecipients
               recipients={data?.dataUser}
               handleRemoveRecipients={handleRemoveRecipients}

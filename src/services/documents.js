@@ -20,9 +20,13 @@ const getDocumentFile = (documentId, type = "initial") => {
 };
 
 const findEmployee = (employeeNumber) => {
-  return esignFetcher
-    .get(`/employees/${employeeNumber}`)
-    .then((res) => res.data);
+  if (!employeeNumber) {
+    return null;
+  } else {
+    return esignFetcher
+      .get(`/employees/${employeeNumber}`)
+      .then((res) => res.data);
+  }
 };
 
 const getDocuments = (query = { type: "all", page: 0, pageSize: 10 }) => {

@@ -6,16 +6,23 @@ import { useQuery } from "@tanstack/react-query";
 import documents from "../services/documents";
 
 const buttons = [
-  { name: "Self Sign", path: "/uploads/self-sign/upload", disabled: false },
+  {
+    name: "Self Sign",
+    path: "/uploads/self-sign/upload",
+    disabled: false,
+    idLang: "Tanda Tangan Mandiri",
+  },
   {
     name: "Sign And Request",
     path: "/uploads/sign-and-share/upload",
     disabled: true,
+    idLang: "Tanda Tangan dan Request Dari Orang Lain",
   },
   {
     name: "Request From Others",
     path: "/uploads/share-only/upload",
     disabled: false,
+    idLang: "Request Dari Orang Lain",
   },
 ];
 
@@ -47,16 +54,17 @@ function ButtonCreate() {
     <>
       <Modal
         centered
-        title="Choose document workflow"
+        title="Pilih Alur Kerja Dokumen"
         footer={null}
         onCancel={() => setVisible(false)}
         visible={visible}
+        width={700}
       >
         <Skeleton loading={isLoading}>
           <Space>
             {getListButtons().map((b) => (
               <Link key={b?.path} href={`${b?.path}`}>
-                <Button disabled={b?.disabled}>{b?.name}</Button>
+                <Button disabled={b?.disabled}>{b?.idLang}</Button>
               </Link>
             ))}
           </Space>

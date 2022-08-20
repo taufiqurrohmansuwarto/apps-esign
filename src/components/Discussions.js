@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Avatar,
   Button,
@@ -131,7 +131,7 @@ const Editor = ({ main, onChange, onSubmit, submitting, value, onCancel }) => (
           onClick={onSubmit}
           type="primary"
         >
-          Add Comment
+          Tambahkan komentar
         </Button>
         {!main && <Button onClick={onCancel}>Cancel</Button>}
       </Space>
@@ -142,7 +142,7 @@ const Editor = ({ main, onChange, onSubmit, submitting, value, onCancel }) => (
 const Discussions = ({ documentId }) => {
   const [message, setMessage] = useState("");
   const { data: user } = useSession();
-  const { data, isLoading } = useQuery("discussions", () =>
+  const { data, isLoading } = useQuery(["discussions", documentId], () =>
     documents.fetchDiscussions(documentId)
   );
 

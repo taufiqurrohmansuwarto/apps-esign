@@ -101,10 +101,10 @@ const DocumentDetail = ({
       tabProps={{ size: "small" }}
       tabActiveKey={router?.pathname?.split("/")?.pop()}
       tabList={[
-        { tab: "Documents", key: "view" },
-        { tab: "Information", key: "information" },
-        { tab: "Discussions", key: "discussions" },
-        { tab: "Recipients", key: "recipients" },
+        { tab: "Dokumen", key: "view" },
+        { tab: "Informasi", key: "information" },
+        { tab: "Diskusi", key: "discussions" },
+        { tab: "Peserta", key: "recipients" },
       ]}
       onBack={handleBack}
       ghost={false}

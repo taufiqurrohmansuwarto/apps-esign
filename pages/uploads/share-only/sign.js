@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { useRouter } from "next/router";
 import Layout from "../../../src/components/Layout";
 import MainRequestFromOthersSign from "../../../src/components/MainRequestFromOthersSign";
@@ -8,9 +9,15 @@ const AddRecipientsRequestFromOthers = () => {
   const { documentId } = router?.query;
 
   return (
-    <RequestFromOthersUploadLayout step={1}>
-      <MainRequestFromOthersSign id={documentId} />
-    </RequestFromOthersUploadLayout>
+    <>
+      <Head>
+        <title>Tambahkan Peserta</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </Head>
+      <RequestFromOthersUploadLayout step={1}>
+        <MainRequestFromOthersSign id={documentId} />
+      </RequestFromOthersUploadLayout>
+    </>
   );
 };
 

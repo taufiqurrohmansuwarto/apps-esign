@@ -28,7 +28,7 @@ const SignInformation = ({ sign }) => {
 };
 
 const DetailDocument = ({ documentId }) => {
-  const { data, isLoading } = useQuery("detail_document", () =>
+  const { data, isLoading } = useQuery(["detail_document"], () =>
     documents.detailDocument(documentId)
   );
 
@@ -37,17 +37,17 @@ const DetailDocument = ({ documentId }) => {
   }
 
   return (
-    <Card>
-      <Typography.Title level={5}>Details</Typography.Title>
+    <>
+      <Typography.Title level={5}>Detail</Typography.Title>
       <Descriptions bordered size="small" layout="vertical">
-        <Descriptions.Item label="Title">{data?.title}</Descriptions.Item>
-        <Descriptions.Item label="Uploaded Date">
+        <Descriptions.Item label="Judul">{data?.title}</Descriptions.Item>
+        <Descriptions.Item label="Tanggal unggah dokumen">
           {dayjs(data?.upload_date).format("DD MMM, YYYY HH:mm")}
         </Descriptions.Item>
-        <Descriptions.Item label="Document Pages">
+        <Descriptions.Item label="Jumlah halaman dokumen">
           {data?.document_pages}
         </Descriptions.Item>
-        <Descriptions.Item label="Owner">
+        <Descriptions.Item label="Pemilik">
           <Space>
             <Avatar src={data?.profile_picture} />
             <div>{data?.owner}</div>
@@ -65,9 +65,9 @@ const DetailDocument = ({ documentId }) => {
       )}
       <br />
       <br />
-      <Typography.Title level={5}>History</Typography.Title>
+      <Typography.Title level={5}>Riwayat Dokumen</Typography.Title>
       <Histories documentId={documentId} />
-    </Card>
+    </>
   );
 };
 

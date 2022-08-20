@@ -57,7 +57,9 @@ const Histories = ({ documentId }) => {
           description: {
             render: (_, item) => {
               return (
-                <Space>{item.is_owner && <Tag color="blue">OWNER</Tag>}</Space>
+                <Space>
+                  {item.is_owner && <Tag color="blue">Pemilik</Tag>}
+                </Space>
               );
             },
           },

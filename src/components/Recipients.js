@@ -1,5 +1,15 @@
 import { QuestionCircleFilled } from "@ant-design/icons";
-import { Card, Col, Row, Skeleton, Space, Tag, Tooltip } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Empty,
+  Row,
+  Skeleton,
+  Space,
+  Tag,
+  Tooltip,
+} from "antd";
 import dynamic from "next/dynamic";
 import { useQuery } from "@tanstack/react-query";
 import documents from "../services/documents";
@@ -18,9 +28,22 @@ const Loading = () => (
   </Row>
 );
 
+const RenderNothing = () => {
+  return (
+    <Row justify="center" align="middle">
+      <Col>
+        <Empty description="Sepertinya anda belum menambahkan peserta ke dalam alur dokumen. Silahkan ke dokumen tab untuk menambahkan peserta">
+          <Button type="primary">Ke tab dokumen</Button>
+        </Empty>
+      </Col>
+    </Row>
+  );
+};
+
 const Recipients = ({ documentId }) => {
-  const { data: documentData, isLoading } = useQuery("recipients", () =>
-    documents.getRecipients(documentId)
+  const { data: documentData, isLoading } = useQuery(
+    ["recipients", documentId],
+    () => documents.getRecipients(documentId)
   );
 
   if (isLoading) {
@@ -29,81 +52,71 @@ const Recipients = ({ documentId }) => {
 
   return (
     <>
-      {documentData?.data?.status === "draft" &&
-      documentData?.data?.workflow === "requestFromOthers" ? (
-        <div>Nothing render</div>
+      {isNoRecipientsForRequestFromOthers(documentData) ? (
+        <RenderNothing />
       ) : (
-        <Row>
-          {isNoRecipientsForRequestFromOthers(documentData?.data) ? (
-            <div>
-              Your workflow is request from others and there is no recipients.
-              Please add the recipient first at documents tab.
-            </div>
-          ) : (
-            <Card style={{ width: "100%" }} title="Recipient">
-              <Space>
-                <span>{documentData?.data?.type}</span>
-                <br />
-                {documentData?.data?.type === "serial" ? (
-                  <>
-                    <Tooltip title="Recipients will sign the document based on signing sequence">
-                      <QuestionCircleFilled />
-                    </Tooltip>
-                  </>
-                ) : (
-                  <>
-                    <Tooltip title="Recipients will sign document freely without sequence">
-                      <QuestionCircleFilled />
-                    </Tooltip>
-                  </>
-                )}
-              </Space>
+        <Card style={{ width: "100%" }} title="Recipient">
+          <Space>
+            <span>{documentData?.type}</span>
+            <br />
+            {documentData?.type === "serial" ? (
               <>
-                <ProList
-                  rowKey="id"
-                  size="large"
-                  dataSource={documentData?.data?.recipients?.filter(
-                    (d) => d?.role !== null
-                  )}
-                  metas={{
-                    title: {
-                      render: (_, row) => {
-                        return <div style={{ minWidth: 200 }}>{row?.name}</div>;
-                      },
-                    },
-                    description: {
-                      render: (_, row) => {
-                        return (
-                          <div
-                            style={{
-                              minWidth: 500,
-                            }}
-                          >
-                            {row?.nip}
-                          </div>
-                        );
-                      },
-                    },
-                    avatar: {
-                      dataIndex: "profile_picture",
-                    },
-                    subTitle: {
-                      render: (_, item) => {
-                        const { kata, color } = documentStatus(item);
-                        return (
-                          <Space size={0}>
-                            <Tag color={color}>{kata?.toUpperCase()}</Tag>
-                            <Tag color={color}>{item?.role?.toUpperCase()}</Tag>
-                          </Space>
-                        );
-                      },
-                    },
-                  }}
-                />
+                <Tooltip title="Recipients will sign the document based on signing sequence">
+                  <QuestionCircleFilled />
+                </Tooltip>
               </>
-            </Card>
-          )}
-        </Row>
+            ) : (
+              <>
+                <Tooltip title="Recipients will sign document freely without sequence">
+                  <QuestionCircleFilled />
+                </Tooltip>
+              </>
+            )}
+          </Space>
+          <>
+            <ProList
+              rowKey="id"
+              size="large"
+              dataSource={documentData?.recipients?.filter(
+                (d) => d?.role !== null
+              )}
+              metas={{
+                title: {
+                  render: (_, row) => {
+                    return <div style={{ minWidth: 200 }}>{row?.name}</div>;
+                  },
+                },
+                description: {
+                  render: (_, row) => {
+                    return (
+                      <div
+                        style={{
+                          minWidth: 500,
+                        }}
+                      >
+                        {row?.nip}
+                      </div>
+                    );
+                  },
+                },
+                avatar: {
+                  dataIndex: "profile_picture",
+                },
+                subTitle: {
+                  render: (_, item) => {
+                    const { kata, color } = documentStatus(item);
+                    return (
+                      <Space size={0}>
+                        <Tag color={color}>{kata?.toUpperCase()}</Tag>
+                        <Tag color={color}>{item?.role?.toUpperCase()}</Tag>
+                      </Space>
+                    );
+                  },
+                },
+              }}
+            />
+          </>
+        </Card>
       )}
     </>
   );
