@@ -125,11 +125,15 @@ const getActivities = () => {
 
 // reviewer api
 const approveReview = (id) => {
-  return esignFetcher.put(`/review-request/${id}`).then((res) => res?.data);
+  return esignFetcher
+    .put(`/documents/${id}/review-request`)
+    .then((res) => res?.data);
 };
 
 const rejectReview = (id) => {
-  return esignFetcher.delete(`/review-request/${id}`).then((res) => res?.data);
+  return esignFetcher
+    .delete(`/documents/${id}/review-request`)
+    .then((res) => res?.data);
 };
 
 export default {

@@ -12,11 +12,23 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 const RequestFromOthersReviewerNotFinish = ({ id }) => {
   const queryClient = useQueryClient();
 
-  const { mutateAsync: confirmReview, isLoading: loadingConfirmReview } =
-    useMutation(() => documents.approveReview(id));
+  const { mutateAsync: confirmReview } = useMutation(
+    () => documents.approveReview(id),
+    {
+      onSettled: () => {
+        queryClient.invalidateQueries(["document", id]);
+      },
+    }
+  );
 
-  const { mutateAsync: rejectReview, isLoading: loadingRejectReview } =
-    useMutation(() => documents.rejectReview(id));
+  const { mutateAsync: rejectReview } = useMutation(
+    () => documents.rejectReview(id),
+    {
+      onSettled: () => {
+        queryClient.invalidateQueries(["document", id]);
+      },
+    }
+  );
 
   const handleConfirm = () => {
     Modal.confirm({
@@ -24,9 +36,14 @@ const RequestFromOthersReviewerNotFinish = ({ id }) => {
       content: "Apakah anda yakin ingin menyetujui dokumen ini?",
       centered: true,
       onOk: () => {
-        return new Promise(async (resolve, reject) => {}).catch(() =>
-          console.log("Oops errors!")
-        );
+        return new Promise(async (resolve, reject) => {
+          try {
+            const result = await confirmReview();
+            resolve(result);
+          } catch (error) {
+            reject(error);
+          }
+        });
       },
     });
   };
@@ -37,7 +54,14 @@ const RequestFromOthersReviewerNotFinish = ({ id }) => {
       content: "Apakah anda yakin ingin menolak dokumen ini?",
       centered: true,
       onOk: () => {
-        alert("setuju");
+        return new Promise(async (resolve, reject) => {
+          try {
+            const result = await rejectReview();
+            resolve(result);
+          } catch (error) {
+            reject(error);
+          }
+        });
       },
     });
   };
@@ -102,13 +126,13 @@ export default function ({
 
   const ButtonAction = () => {
     if (requestFromOthersReviewerNotFinished) {
-      return <RequestFromOthersReviewerNotFinish />;
+      return <RequestFromOthersReviewerNotFinish id={id} />;
     } else if (requestFromOthersReviewerFinished) {
-      return <RequestFromOthersReviewerFinish />;
+      return <RequestFromOthersReviewerFinish id={id} />;
     } else if (requestFromOthersSignerNotFinished) {
-      return <RequestFromOthersSignNotFinish />;
+      return <RequestFromOthersSignNotFinish id={id} />;
     } else if (requestFromOthersSignerFinished) {
-      return <RequestFromOthersSignFinish />;
+      return <RequestFromOthersSignFinish id={id} />;
     } else {
       return null;
     }
