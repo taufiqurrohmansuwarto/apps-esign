@@ -245,3 +245,32 @@ export const fetchSingleDocuments = async (req, res) => {
     res.status(400).json({ code: 400, message: "Internal Server Error" });
   }
 };
+
+// reviewer
+export const approveReview = async (req, res) => {
+  try {
+    const { fetcher } = req;
+    const { documentId } = req.query;
+
+    const result = await fetcher.put(`/documents/${documentId}/review-request`);
+    res.json(result?.data);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ code: 400, message: "Internal Server Error" });
+  }
+};
+
+export const rejectReview = async (req, res) => {
+  try {
+    const { fetcher } = req;
+    const { documentId } = req.query;
+
+    const result = await fetcher.delete(
+      `/documents/${documentId}/review-reject`
+    );
+    res.json(result?.data);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ code: 400, message: "Internal Server Error" });
+  }
+};

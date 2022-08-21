@@ -1,9 +1,18 @@
+import Head from "next/head";
 import Layout from "../../../src/components/Layout";
 import ListDocuments from "../../../src/components/ListDocument";
 import NestedLayout from "../../../src/components/NestedLayout";
 
 const List = () => {
-  return <ListDocuments />;
+  return (
+    <>
+      <Head>
+        <title>Semua Dokumen</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </Head>
+      <ListDocuments />
+    </>
+  );
 };
 
 List.getLayout = function getLayout(page) {

@@ -123,7 +123,18 @@ const getActivities = () => {
   return esignFetcher.get("/activities").then((res) => res.data);
 };
 
+// reviewer api
+const approveReview = (id) => {
+  return esignFetcher.put(`/review-request/${id}`).then((res) => res?.data);
+};
+
+const rejectReview = (id) => {
+  return esignFetcher.delete(`/review-request/${id}`).then((res) => res?.data);
+};
+
 export default {
+  approveReview,
+  rejectReview,
   getActivities,
   checkStatus,
   download,

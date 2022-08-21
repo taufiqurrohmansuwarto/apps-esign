@@ -1,5 +1,3 @@
-// untuk melakukan reject dan melakukan approve
-
 import { createRouter } from "next-connect";
 import {
   approveReview,

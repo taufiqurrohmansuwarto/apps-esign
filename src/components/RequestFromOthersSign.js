@@ -11,6 +11,7 @@ import {
 } from "antd";
 import { useRef, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
+import DocumentLoading from "./DocumentLoading";
 import ShareAndRequest from "./ShareAndRequest";
 import SignMove from "./SignMoveMultiple";
 
@@ -108,6 +109,7 @@ const PdfDocument = ({
               <Document
                 file={`data:application/pdf;base64,${docUrl}`}
                 onLoadSuccess={onLoadDocumentSucces}
+                loading={<DocumentLoading />}
               >
                 <Page
                   onLoadSuccess={onLoadPageSuccess}
@@ -143,27 +145,7 @@ const RequestFromOthersSign = function ({
   const [reason, setReason] = useState("I approve this document");
 
   if (loading == "loading") {
-    return (
-      <Row
-        justify="center"
-        align="middle"
-        style={{ padding: 18, backgroundColor: "GrayText" }}
-      >
-        <Card style={{ width: 600, height: 800 }}>
-          <Skeleton avatar={{ size: 100 }} active />
-          <Skeleton paragraph active />
-          <Skeleton paragraph active />
-          <Row justify="center" align="middle">
-            <Space size="large">
-              <Skeleton.Image size="large" active />
-              <Skeleton.Image size="large" active />
-              <Skeleton.Image size="large" active />
-            </Space>
-          </Row>
-          <Skeleton paragraph active />
-        </Card>
-      </Row>
-    );
+    return <DocumentLoading />;
   }
 
   return (

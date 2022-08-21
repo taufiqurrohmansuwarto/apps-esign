@@ -16,6 +16,7 @@ import {
   Row,
   Upload,
 } from "antd";
+import Head from "next/head";
 import Link from "next/link";
 import { useState } from "react";
 import documents from "../../src/services/documents";
@@ -181,48 +182,54 @@ const CheckDocument = () => {
   };
 
   return (
-    <Row style={{ maxHeight: "100vh" }} justify="center" align="stretch">
-      <Col span={12}>
-        <ModalViewPdf
-          fileUrl={fileUrl}
-          visible={showModal}
-          onCancel={cancelModal}
-        />
-        <Breadcrumb>
-          <Breadcrumb.Item>
-            <Link href="/">
-              <a>Beranda</a>
-            </Link>
-          </Breadcrumb.Item>
-          <Breadcrumb.Item>Cek Dokumen</Breadcrumb.Item>
-        </Breadcrumb>
+    <>
+      <Head>
+        <title>Cek Dokumen</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </Head>
+      <Row style={{ maxHeight: "100vh" }} justify="center" align="stretch">
+        <Col span={12}>
+          <ModalViewPdf
+            fileUrl={fileUrl}
+            visible={showModal}
+            onCancel={cancelModal}
+          />
+          <Breadcrumb>
+            <Breadcrumb.Item>
+              <Link href="/">
+                <a>Beranda</a>
+              </Link>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>Cek Dokumen</Breadcrumb.Item>
+          </Breadcrumb>
 
-        <Alert
-          style={{ marginTop: "20px" }}
-          showIcon
-          type="warning"
-          message="Perlu diperhatikan"
-          description="Siapkan dokumen yang akan diupload. File harus memiliki format .pdf dan berukuran kurang dari 1 MB. Kemudian klik tombol upload dan tunggu sampai proses verifikasi selesai."
-        />
-        <Divider />
-        <Upload
-          beforeUpload={checkerFile}
-          maxCount={1}
-          accept=".pdf"
-          showUploadList={false}
-        >
-          <Button
-            type="primary"
-            icon={loading ? <LoadingOutlined /> : <UploadOutlined />}
-            disabled={loading}
+          <Alert
+            style={{ marginTop: "20px" }}
+            showIcon
+            type="warning"
+            message="Perlu diperhatikan"
+            description="Siapkan dokumen yang akan diupload. File harus memiliki format .pdf dan berukuran kurang dari 1 MB. Kemudian klik tombol upload dan tunggu sampai proses verifikasi selesai."
+          />
+          <Divider />
+          <Upload
+            beforeUpload={checkerFile}
+            maxCount={1}
+            accept=".pdf"
+            showUploadList={false}
           >
-            Unggah Dokumen
-          </Button>
-        </Upload>
+            <Button
+              type="primary"
+              icon={loading ? <LoadingOutlined /> : <UploadOutlined />}
+              disabled={loading}
+            >
+              Unggah Dokumen
+            </Button>
+          </Upload>
 
-        {result && <ResultDocument openModal={openModal} data={result} />}
-      </Col>
-    </Row>
+          {result && <ResultDocument openModal={openModal} data={result} />}
+        </Col>
+      </Row>
+    </>
   );
 };
 

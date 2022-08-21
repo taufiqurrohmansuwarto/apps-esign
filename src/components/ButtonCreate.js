@@ -1,4 +1,4 @@
-import { PlusOutlined } from "@ant-design/icons";
+import { EditFilled, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Modal, Skeleton, Space } from "antd";
 import Link from "next/link";
 import { useState } from "react";
@@ -28,8 +28,12 @@ const buttons = [
 
 function ButtonCreate() {
   const [visible, setVisible] = useState(false);
-  const { data: status, isLoading } = useQuery(["status"], () =>
-    documents.checkStatus()
+  const { data: status, isLoading } = useQuery(
+    ["status"],
+    () => documents.checkStatus(),
+    {
+      refetchOnWindowFocus: false,
+    }
   );
 
   const showModal = () => {
@@ -70,11 +74,7 @@ function ButtonCreate() {
           </Space>
         </Skeleton>
       </Modal>
-      <Button
-        icon={<PlusOutlined />}
-        type="primary"
-        onClick={showModal}
-      ></Button>
+      <Button icon={<EditFilled />} type="primary" onClick={showModal}></Button>
     </>
   );
 }

@@ -22,6 +22,7 @@ import {
   Typography,
 } from "antd";
 import { useSession } from "next-auth/react";
+import Head from "next/head";
 import Link from "next/link";
 import Layout from "../src/components/Layout";
 import documents from "../src/services/documents";
@@ -132,59 +133,69 @@ const Dashboard = () => {
 
   const { data: status, isLoading: isLoadingStatus } = useQuery(
     ["status"],
-    () => documents.checkStatus()
+    () => documents.checkStatus(),
+    {
+      refetchOnWindowFocus: false,
+    }
   );
 
   return (
-    <Card>
-      <Greetings user={data?.user} />
-      <Divider />
-      <Typography.Title level={5}>Status</Typography.Title>
-      <Status data={status} loading={isLoadingStatus} />
-      <Divider />
-      <DashboardStatistic loading={isLoading} data={dashboardData?.data} />
-      <Divider />
-      <Row>
-        <Col span={12}>
-          <div style={{ paddingTop: 10, paddingBottom: 10 }}>
-            <Space>
-              <Link href="/documents/list/all">
+    <>
+      <Head>
+        <title>Dasbor E-SIGN</title>
+        <link rel="icon" href="/esign/favicon.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </Head>
+      <Card>
+        <Greetings user={data?.user} />
+        <Divider />
+        <Typography.Title level={5}>Status</Typography.Title>
+        <Status data={status} loading={isLoadingStatus} />
+        <Divider />
+        <DashboardStatistic loading={isLoading} data={dashboardData?.data} />
+        <Divider />
+        <Row>
+          <Col span={12}>
+            <div style={{ paddingTop: 10, paddingBottom: 10 }}>
+              <Space>
+                <Link href="/documents/list/all">
+                  <a>
+                    <ProfileOutlined /> Lihat Semua dokumen
+                  </a>
+                </Link>
+              </Space>
+            </div>
+            <div style={{ paddingTop: 10, paddingBottom: 10 }}>
+              <Space>
+                <Link href="/settings/activity-log">
+                  <a>
+                    <InteractionOutlined /> Aktivitas
+                  </a>
+                </Link>
+              </Space>
+            </div>
+            <div style={{ paddingTop: 10, paddingBottom: 10 }}>
+              <Link href="/settings/signatures">
                 <a>
-                  <ProfileOutlined /> Lihat Semua dokumen
+                  <Space>
+                    <FileDoneOutlined /> Stempel
+                  </Space>
                 </a>
               </Link>
-            </Space>
-          </div>
-          <div style={{ paddingTop: 10, paddingBottom: 10 }}>
-            <Space>
-              <Link href="/settings/activity-log">
+            </div>
+            <div style={{ paddingTop: 10, paddingBottom: 10 }}>
+              <Link href="/settings/faq">
                 <a>
-                  <InteractionOutlined /> Aktivitas
+                  <Space>
+                    <QuestionCircleOutlined /> Butuh bantuan?
+                  </Space>
                 </a>
               </Link>
-            </Space>
-          </div>
-          <div style={{ paddingTop: 10, paddingBottom: 10 }}>
-            <Link href="/settings/signatures">
-              <a>
-                <Space>
-                  <FileDoneOutlined /> Stempel
-                </Space>
-              </a>
-            </Link>
-          </div>
-          <div style={{ paddingTop: 10, paddingBottom: 10 }}>
-            <Link href="/settings/faq">
-              <a>
-                <Space>
-                  <QuestionCircleOutlined /> Butuh bantuan?
-                </Space>
-              </a>
-            </Link>
-          </div>
-        </Col>
-      </Row>
-    </Card>
+            </div>
+          </Col>
+        </Row>
+      </Card>
+    </>
   );
 };
 

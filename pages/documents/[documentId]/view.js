@@ -4,6 +4,7 @@ import DetailDocumentLayout from "../../../src/components/DetailDocumentLayout";
 import DocumentFinishOrWaiting from "../../../src/components/DocumentFinishOrWaiting";
 import MainRequestFromOthersSign from "../../../src/components/MainRequestFromOthersSign";
 import MailSelfSign from "../../../src/components/MainSelfSign";
+import { useSession } from "next-auth/react";
 
 // {role : reviewer, document_status : on going, workflow : 'selfSign}
 const splitId = (id) => {
@@ -35,12 +36,12 @@ const MainDocument = ({ document }) => {
   const requestFromOthersReviewerNotFinished =
     workflow === "requestFromOthers" &&
     currentUser?.role === "reviewer" &&
-    currentUser?.signatory_status === "";
+    currentUser?.signatory_status === "in progress";
 
   const requestFromOthersSignNotFinished =
     workflow === "requestFromOthers" &&
     currentUser?.role === "signer" &&
-    currentUser?.signatory_status === "";
+    currentUser?.signatory_status === "in progress";
 
   if (workflowSelfSignNotFinisihed) {
     signOrNot = "initial";
@@ -56,18 +57,33 @@ const MainDocument = ({ document }) => {
     return <MailSelfSign id={id} />;
   } else if (workflowRequestFromOthersNotFinisihed) {
     return <MainRequestFromOthersSign id={id} />;
+  } else if (requestFromOthersReviewerNotFinished) {
+    return (
+      <DocumentFinishOrWaiting
+        role={currentUser?.role}
+        status={currentUser?.signatory_status}
+        workflow="requestFromOthers"
+        id={id}
+      />
+    );
   } else {
-    return <DocumentFinishOrWaiting id={id} />;
+    return (
+      <>
+        <DocumentFinishOrWaiting id={id} />
+      </>
+    );
   }
 };
 
-const View = ({ data, id, user }) => {
+const View = ({ data, id }) => {
+  const { data: userData } = useSession();
+
   const document = {
     workflow: data?.workflow,
     status: data?.status?.documentStatus,
     type: data?.type,
     id,
-    user: user?.user,
+    user: userData?.user,
     recipients: data?.recipients,
   };
 
@@ -93,13 +109,13 @@ export const getServerSideProps = async (ctx) => {
       Authorization: `Bearer ${session?.accessToken}`,
     },
   });
+
   const result = await data?.json();
 
   return {
     props: {
       data: result,
       id: documentId,
-      user: session,
     },
   };
 };

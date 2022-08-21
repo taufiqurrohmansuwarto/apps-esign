@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import SettingLayout from "../../src/components/SettingLayout";
 import documents from "../../src/services/documents";
 import Layout from "../../src/components/Layout";
+import Head from "next/head";
 
 const Activity = () => {
   const { data, isLoading } = useQuery(["activities"], () =>
@@ -18,19 +19,25 @@ const Activity = () => {
   ];
 
   return (
-    <Card title="Log Aktivitas">
-      <Table
-        size="small"
-        columns={columns}
-        loading={isLoading}
-        rowKey={(row) => row?.id}
-        dataSource={data?.data}
-        pagination={{
-          total: data?.meta?.total,
-          pageSize: 20,
-        }}
-      />
-    </Card>
+    <>
+      <Head>
+        <title>Riwayat Aktivitas</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </Head>
+      <Card title="Log Aktivitas">
+        <Table
+          size="small"
+          columns={columns}
+          loading={isLoading}
+          rowKey={(row) => row?.id}
+          dataSource={data?.data}
+          pagination={{
+            total: data?.meta?.total,
+            pageSize: 20,
+          }}
+        />
+      </Card>
+    </>
   );
 };
 
