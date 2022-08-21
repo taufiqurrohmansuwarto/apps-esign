@@ -8,7 +8,9 @@ import {
   FileOutlined,
   FolderOpenOutlined,
   SettingOutlined,
+  SnippetsOutlined,
   UnorderedListOutlined,
+  VerifiedOutlined,
 } from "@ant-design/icons";
 
 export default {
@@ -58,6 +60,29 @@ export default {
           path: "/documents/list/rejected",
           name: "Ditolak",
           icon: <CloseSquareOutlined />,
+        },
+      ],
+    },
+    {
+      path: "/documents-collectives/request",
+      name: "Dokumen Kolektif",
+      hideChildrenInMenu: true,
+      icon: <SnippetsOutlined />,
+      routes: [
+        {
+          path: "/documents-collectives/request",
+          name: "Permintaan",
+          icon: <SnippetsOutlined />,
+        },
+        {
+          path: "/documents-collectives/sertifikat",
+          name: "Sertifikat",
+          icon: <BookOutlined />,
+        },
+        {
+          path: "/documents-collectives/surat-keputusan",
+          name: "Surat Keputusan",
+          icon: <BookOutlined />,
         },
       ],
     },

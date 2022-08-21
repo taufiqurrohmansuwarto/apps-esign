@@ -1,7 +1,7 @@
 import { Button, Col, Modal, Row, Skeleton, Space } from "antd";
 import React, { useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import documents from "../services/documents";
 import DocumentLoading from "./DocumentLoading";
 
@@ -9,14 +9,24 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 
 //  its done when the workflow is selfsign and signatory_status completed
 
-const RequestFromOthersReviewerNotFinish = () => {
+const RequestFromOthersReviewerNotFinish = ({ id }) => {
+  const queryClient = useQueryClient();
+
+  const { mutateAsync: confirmReview, isLoading: loadingConfirmReview } =
+    useMutation(() => documents.approveReview(id));
+
+  const { mutateAsync: rejectReview, isLoading: loadingRejectReview } =
+    useMutation(() => documents.rejectReview(id));
+
   const handleConfirm = () => {
     Modal.confirm({
       title: "Konfirmasi",
       content: "Apakah anda yakin ingin menyetujui dokumen ini?",
       centered: true,
       onOk: () => {
-        alert("setuju");
+        return new Promise(async (resolve, reject) => {}).catch(() =>
+          console.log("Oops errors!")
+        );
       },
     });
   };
@@ -108,53 +118,6 @@ export default function ({
     setNumPages(numPages);
   }
 
-  // reviewer
-  const handleApproveReview = async () => {
-    Modal.confirm({
-      title: "Warn",
-      content: <div>Are you sure want to approve this document?</div>,
-    });
-  };
-
-  const handleRejectReview = async () => {
-    Modal.confirm({
-      title: "Warn",
-      content: <div>Are you sure want to reject this document?</div>,
-    });
-  };
-
-  // signer
-  const handleApproveSign = async () => {};
-  const handleRejectSign = async () => {};
-
-  const ButtonHandler = () => {
-    if (role === "done") {
-      return null;
-    } else if (role === "reviewer") {
-      return (
-        <Space>
-          <Button type="primary" size="small" onClick={handleApproveReview}>
-            Approve Review
-          </Button>
-          <Button size="small" onClick={handleRejectReview}>
-            Reject Review
-          </Button>
-        </Space>
-      );
-    } else if (role === "signer") {
-      return (
-        <Space>
-          <Button type="primary" size="small" onClick={handleApproveSign}>
-            Approve Sign
-          </Button>
-          <Button size="small" onClick={handleRejectSign}>
-            Reject Sign
-          </Button>
-        </Space>
-      );
-    }
-  };
-
   if (isLoading) {
     return <DocumentLoading />;
   }
@@ -179,7 +142,7 @@ export default function ({
               padding: "0px 10px",
             }}
           >
-            <ButtonAction />
+            <ButtonAction id={id} />
             <Row justify="center">
               <Document
                 file={`data:application/pdf;base64,${data?.data}`}

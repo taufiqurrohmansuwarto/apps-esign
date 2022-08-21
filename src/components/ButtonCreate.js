@@ -1,8 +1,8 @@
-import { EditFilled, EditOutlined, PlusOutlined } from "@ant-design/icons";
+import { FormOutlined } from "@ant-design/icons";
+import { useQuery } from "@tanstack/react-query";
 import { Button, Modal, Skeleton, Space } from "antd";
 import Link from "next/link";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import documents from "../services/documents";
 
 const buttons = [
@@ -74,7 +74,11 @@ function ButtonCreate() {
           </Space>
         </Skeleton>
       </Modal>
-      <Button icon={<EditFilled />} type="primary" onClick={showModal}></Button>
+      <Button
+        icon={<FormOutlined />}
+        type="primary"
+        onClick={showModal}
+      ></Button>
     </>
   );
 }

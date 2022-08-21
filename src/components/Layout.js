@@ -22,15 +22,15 @@ const gotoSettings = (router) => () => {
 const menu = (router) => (
   <Menu>
     <Menu.Item
-      key="logut"
+      key="pengaturan"
       onClick={gotoSettings(router)}
       icon={<SettingOutlined />}
     >
-      Settings
+      Pengaturan
     </Menu.Item>
 
-    <Menu.Item key="logut" onClick={handleSignout} icon={<LogoutOutlined />}>
-      Logout
+    <Menu.Item key="logout" onClick={handleSignout} icon={<LogoutOutlined />}>
+      Keluar
     </Menu.Item>
   </Menu>
 );
