@@ -174,7 +174,7 @@ const CheckDocumentById = () => {
   );
 
   return (
-    <div style={{ padding: "8rem" }}>
+    <div>
       <Skeleton loading={isLoading}>
         {data?.data ? (
           <DataFound data={data?.data} />
