@@ -23,6 +23,18 @@ export const checkDocument = async (req, res) => {
   }
 };
 
+// cek status by document id
+export const checkDocumentById = async (req, res) => {
+  try {
+    const { documentId } = req?.query;
+    const result = await esignFetcher.get(`/check-document/${documentId}`);
+    res.json(result?.data);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ code: 400, message: "Internal Server Error" });
+  }
+};
+
 // coba cek status
 export const checkStatus = async (req, res) => {
   try {

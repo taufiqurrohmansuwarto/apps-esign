@@ -136,6 +136,10 @@ const rejectReview = (id) => {
     .then((res) => res?.data);
 };
 
+const checkDocumentById = (id) => {
+  return esignFetcher.get(`/check/document/${id}`).then((res) => res?.data);
+};
+
 export default {
   approveReview,
   rejectReview,
@@ -158,4 +162,5 @@ export default {
   requestOtp,
   approveSign,
   checkDocumentPublic,
+  checkDocumentById,
 };
