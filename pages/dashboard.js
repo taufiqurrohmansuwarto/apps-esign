@@ -113,10 +113,7 @@ const DashboardStatistic = ({ data, loading }) => {
               <Statistic
                 prefix={<FileDoneOutlined />}
                 title={
-                  <Dokumen
-                    title="Dokumen Selesai"
-                    url="/documents/list/completed"
-                  />
+                  <Dokumen title="Dokumen Selesai" url="/documents/list/done" />
                 }
                 value={data?.completed}
               />

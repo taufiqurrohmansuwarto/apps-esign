@@ -1,4 +1,4 @@
-import { Button, Col, Modal, Row, Skeleton, Space } from "antd";
+import { Button, Col, message, Modal, Row, Skeleton, Space } from "antd";
 import React, { useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -16,10 +16,10 @@ const RequestFromOthersReviewerNotFinish = ({ id }) => {
     () => documents.approveReview(id),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["document-view-detail", id]);
+        message.success("Dokumen berhasil diupdate");
       },
       onSettled: () => {
-        queryClient.invalidateQueries(["document-view-detail", id]);
+        queryClient.invalidateQueries(["layout-view", id]);
       },
     }
   );
@@ -28,10 +28,10 @@ const RequestFromOthersReviewerNotFinish = ({ id }) => {
     () => documents.rejectReview(id),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["document-view-detail", id]);
+        message.success("Dokumen berhasil diupdate");
       },
       onSettled: () => {
-        queryClient.invalidateQueries(["document-view-detail", id]);
+        queryClient.invalidateQueries(["layout-view", id]);
       },
     }
   );

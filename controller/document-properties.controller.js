@@ -266,7 +266,7 @@ export const rejectReview = async (req, res) => {
     const { documentId } = req.query;
 
     const result = await fetcher.delete(
-      `/documents/${documentId}/review-reject`
+      `/documents/${documentId}/review-request`
     );
     res.json(result?.data);
   } catch (error) {
