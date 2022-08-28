@@ -21,6 +21,7 @@ import {
   Statistic,
   Typography,
 } from "antd";
+import { upperCase } from "lodash";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
@@ -58,7 +59,9 @@ const Status = ({ data, loading }) => {
         {data?.message === "User tidak terdaftar dalam bsre" ? (
           <>
             <CloseCircleTwoTone twoToneColor="red" />
-            <span style={{ color: "red" }}>{data?.message}</span>
+            <span style={{ color: "red", fontWeight: "bold" }}>
+              {upperCase(data?.message)}
+            </span>
           </>
         ) : (
           <>

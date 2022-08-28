@@ -1,17 +1,26 @@
-import { getSession } from "next-auth/react";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import DetailDocumentLayout from "../../../src/components/DetailDocumentLayout";
 import Recipients from "../../../src/components/Recipients";
 
-const Information = ({ data }) => {
+import documents from "../../../src/services/documents";
+
+const Information = () => {
   const router = useRouter();
 
   const {
     query: { documentId },
   } = router;
 
+  const { data, isLoading } = useQuery(
+    ["layout-view", documentId],
+    () => documents.detailDocument(documentId),
+    {}
+  );
+
   return (
     <DetailDocumentLayout
+      loading={isLoading}
       status={data?.document_status}
       info={{ status: data?.status?.documentStatus, workflow: data?.workflow }}
       document={{ title: `${data?.title}.pdf` }}
@@ -20,26 +29,6 @@ const Information = ({ data }) => {
       <Recipients documentId={documentId} />
     </DetailDocumentLayout>
   );
-};
-
-export const getServerSideProps = async (ctx) => {
-  const { documentId } = ctx.params;
-  const session = await getSession(ctx);
-  const url = process.env.RESOURCE_PROTECTED_URL;
-
-  const data = await fetch(`${url}/documents/${documentId}/details`, {
-    headers: {
-      Authorization: `Bearer ${session?.accessToken}`,
-    },
-  });
-
-  const result = await data?.json();
-
-  return {
-    props: {
-      data: result,
-    },
-  };
 };
 
 Information.auth = {

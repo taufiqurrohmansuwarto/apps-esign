@@ -1,5 +1,14 @@
 import { DownloadOutlined, FileAddOutlined } from "@ant-design/icons";
-import { Alert, Button, Card, Dropdown, Menu, Space, Tag } from "antd";
+import {
+  Alert,
+  Button,
+  Card,
+  Dropdown,
+  Menu,
+  Skeleton,
+  Space,
+  Tag,
+} from "antd";
 import { capitalize, startCase } from "lodash";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
@@ -77,6 +86,7 @@ const DocumentDetail = ({
   children,
   data,
   status,
+  loading,
   documentStatus,
 }) => {
   const router = useRouter();
@@ -88,12 +98,31 @@ const DocumentDetail = ({
   return (
     <PageContainer
       fixedHeader
+      loading={loading}
       header={{
-        title: document?.title,
+        title: loading ? (
+          <Skeleton.Input size="small" style={{ width: 300 }} />
+        ) : (
+          document?.title
+        ),
       }}
-      content={<DocumentInfo documentStatus={documentStatus} />}
-      extra={<DropdownMenu data={data} key="more" />}
-      subTitle={<TagDocument status={status} workflow={data?.workflow} />}
+      content={
+        loading ? (
+          <Skeleton.Input size="small" />
+        ) : (
+          <DocumentInfo documentStatus={documentStatus} />
+        )
+      }
+      extra={
+        loading ? <Skeleton.Input /> : <DropdownMenu data={data} key="more" />
+      }
+      subTitle={
+        loading ? (
+          <Skeleton.Input size="small" />
+        ) : (
+          <TagDocument status={status} workflow={data?.workflow} />
+        )
+      }
       onTabChange={(routing) => {
         const { documentId } = router?.query;
         router.push(`/documents/${documentId}/${routing}`);
@@ -120,16 +149,12 @@ const DetailDocumentLayout = ({
   info,
   status,
   documentStatus,
+  loading,
 }) => {
-  // const currentDocument = { title: "serah terima pks.pdf" };
-  // const data = { status: "completed", workflow: "requestFromOthers" };
-  // const status = {
-  //   description: "This Document is waiting for your sign",
-  //   descriptionStatus: "info",
-  // };
   return (
     <Layout>
       <DocumentDetail
+        loading={loading}
         documentStatus={documentStatus}
         status={status}
         data={info}

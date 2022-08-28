@@ -241,7 +241,12 @@ const ShareAndRequest = () => {
         extra={
           <Space>
             <Button onClick={() => setShowDrawer(false)}>Batal</Button>
-            <Button type="primary" onClick={handleSubmit}>
+            <Button
+              loading={recipientsMutation.isLoading}
+              disabled={recipientsMutation.isLoading}
+              type="primary"
+              onClick={handleSubmit}
+            >
               Submit
             </Button>
           </Space>

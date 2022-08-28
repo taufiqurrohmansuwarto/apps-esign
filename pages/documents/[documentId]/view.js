@@ -1,10 +1,11 @@
+import { useQuery } from "@tanstack/react-query";
 import { toString } from "lodash";
-import { getSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import DetailDocumentLayout from "../../../src/components/DetailDocumentLayout";
 import DocumentFinishOrWaiting from "../../../src/components/DocumentFinishOrWaiting";
 import MainRequestFromOthersSign from "../../../src/components/MainRequestFromOthersSign";
 import MailSelfSign from "../../../src/components/MainSelfSign";
-import { useSession } from "next-auth/react";
+import documents from "../../../src/services/documents";
 
 // {role : reviewer, document_status : on going, workflow : 'selfSign}
 const splitId = (id) => {
@@ -12,13 +13,22 @@ const splitId = (id) => {
   return currentId;
 };
 
-const MainDocument = ({ document }) => {
+const MainDocument = ({ data }) => {
+  const document = {
+    workflow: data?.workflow,
+    status: data?.status?.documentStatus,
+    type: data?.type,
+    id: data?.id,
+    user: data?.user,
+    recipients: data?.recipients,
+  };
+
   const { workflow, status, type, id, user, recipients } = document;
 
   let signOrNot = "initial";
   const currentUserId = splitId(user?.id);
-  const owner = recipients?.find((recipient) => recipient?.is_owner);
-  const currentUser = recipients.find(
+  const owner = data?.recipients?.find((recipient) => recipient?.is_owner);
+  const currentUser = data?.recipients?.find(
     (recipient) => toString(recipient?.employee_id) === toString(currentUserId)
   );
 
@@ -49,10 +59,6 @@ const MainDocument = ({ document }) => {
     signOrNot = "initial";
   }
 
-  // return <DocumentFinishOrWaiting id={id} />;
-
-  // return <div>{JSON.stringify(recipients)}</div>;
-
   if (workflowSelfSignNotFinisihed) {
     return <MailSelfSign id={id} />;
   } else if (workflowRequestFromOthersNotFinisihed) {
@@ -75,46 +81,32 @@ const MainDocument = ({ document }) => {
   }
 };
 
-const View = ({ data, id }) => {
+const View = ({ id }) => {
   const { data: userData } = useSession();
-
-  const document = {
-    workflow: data?.workflow,
-    status: data?.status?.documentStatus,
-    type: data?.type,
-    id,
-    user: userData?.user,
-    recipients: data?.recipients,
-  };
+  const { data, isLoading } = useQuery(
+    ["layout-view", id],
+    () => documents.detailDocument(id),
+    {}
+  );
 
   return (
     <DetailDocumentLayout
+      loading={isLoading}
       status={data?.document_status}
       info={{ status: data?.status?.documentStatus, workflow: data?.workflow }}
       document={{ title: `${data?.title}.pdf` }}
       documentStatus={data?.status}
     >
-      <MainDocument document={document} />
+      {data && <MainDocument data={{ ...data, ...userData }} />}
     </DetailDocumentLayout>
   );
 };
 
 export const getServerSideProps = async (ctx) => {
   const { documentId } = ctx.params;
-  const session = await getSession(ctx);
-  const url = process.env.RESOURCE_PROTECTED_URL;
-
-  const data = await fetch(`${url}/documents/${documentId}/details`, {
-    headers: {
-      Authorization: `Bearer ${session?.accessToken}`,
-    },
-  });
-
-  const result = await data?.json();
 
   return {
     props: {
-      data: result,
       id: documentId,
     },
   };

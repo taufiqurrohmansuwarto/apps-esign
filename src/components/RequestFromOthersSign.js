@@ -1,14 +1,4 @@
-import {
-  Card,
-  Col,
-  Input,
-  InputNumber,
-  Modal,
-  Pagination,
-  Row,
-  Skeleton,
-  Space,
-} from "antd";
+import { Col, Input, InputNumber, Modal, Pagination, Row } from "antd";
 import { useRef, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import DocumentLoading from "./DocumentLoading";

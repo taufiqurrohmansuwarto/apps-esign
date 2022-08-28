@@ -122,6 +122,7 @@ const ListDocuments = ({ type = "all" }) => {
     async () => documents.getDocuments(query),
     {
       enabled: Boolean(query),
+      refetchOnWindowFocus: false,
     }
   );
 

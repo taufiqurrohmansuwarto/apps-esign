@@ -15,8 +15,11 @@ const RequestFromOthersReviewerNotFinish = ({ id }) => {
   const { mutateAsync: confirmReview } = useMutation(
     () => documents.approveReview(id),
     {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["document-view-detail", id]);
+      },
       onSettled: () => {
-        queryClient.invalidateQueries(["document", id]);
+        queryClient.invalidateQueries(["document-view-detail", id]);
       },
     }
   );
@@ -24,8 +27,11 @@ const RequestFromOthersReviewerNotFinish = ({ id }) => {
   const { mutateAsync: rejectReview } = useMutation(
     () => documents.rejectReview(id),
     {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["document-view-detail", id]);
+      },
       onSettled: () => {
-        queryClient.invalidateQueries(["document", id]);
+        queryClient.invalidateQueries(["document-view-detail", id]);
       },
     }
   );
@@ -76,10 +82,6 @@ const RequestFromOthersReviewerNotFinish = ({ id }) => {
   );
 };
 
-const RequestFromOthersReviewerFinish = () => {
-  return <Button>request from others reviewer finish</Button>;
-};
-
 const RequestFromOthersSignFinish = () => {
   return <Button>request from others sign finish</Button>;
 };
@@ -97,11 +99,9 @@ export default function ({
 }) {
   const [numPages, setNumPages] = useState(null);
   const { data, isLoading } = useQuery(
-    ["document", id],
+    ["document-view-detail", id],
     () => documents.getDocumentFile(id, type),
-    {
-      refetchOnWindowFocus: false,
-    }
+    {}
   );
 
   const requestFromOthersReviewerNotFinished =
@@ -166,7 +166,7 @@ export default function ({
               padding: "0px 10px",
             }}
           >
-            <ButtonAction id={id} />
+            <ButtonAction />
             <Row justify="center">
               <Document
                 file={`data:application/pdf;base64,${data?.data}`}
