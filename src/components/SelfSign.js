@@ -5,6 +5,7 @@ import {
   Col,
   Input,
   InputNumber,
+  message,
   Modal,
   Pagination,
   Row,
@@ -14,7 +15,7 @@ import {
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import documentServices from "../../src/services/documents";
 import SignMove from "./SignMove";
 import OtpInput from "react-otp-input";
@@ -139,19 +140,11 @@ const SelfSign = function ({
   removeSign,
 }) {
   const [open, setOpen] = useState(false);
-  const [otp, setOtp] = useState("");
   const [reason, setReason] = useState("I approve this document");
   const [passphrase, setPassphrase] = useState("");
   const router = useRouter();
 
-  const otpMutation = useMutation((id) => documentServices.requestOtp(id), {
-    onSuccess: () => {
-      setOpen(true);
-    },
-    onError: (err) => {
-      console.log(err);
-    },
-  });
+  const queryClient = useQueryClient();
 
   const approveSignMutation = useMutation(
     (d) => documentServices.approveSign(d),
@@ -160,7 +153,11 @@ const SelfSign = function ({
         router.push("/documents/list/all");
       },
       onError: (error) => {
-        console.log(error);
+        message.error(error?.response?.data?.message);
+        console.error(error);
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries(["layout-view", documentData?.id]);
       },
     }
   );
@@ -249,13 +246,14 @@ const SelfSign = function ({
               <Button
                 type="primary"
                 onClick={addSign}
-                disabled={otpMutation.isLoading}
+                disabled={approveSignMutation.isLoading}
               >
                 Place Signature
               </Button>
               <Button
                 disabled={signs.length === 0}
                 onClick={() => setOpen(true)}
+                loading={approveSignMutation.isLoading}
               >
                 Finish
               </Button>

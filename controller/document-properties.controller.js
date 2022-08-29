@@ -1,3 +1,4 @@
+import { AxiosError } from "axios";
 import FormData from "form-data";
 import qs from "query-string";
 
@@ -29,7 +30,14 @@ export const approveSign = async (req, res) => {
     await approveSignApi(req.fetcher, documentId, data);
     res.json({ code: "sukses" });
   } catch (error) {
-    res.status(400).json({ code: 400, message: "Internal Server Error" });
+    if (error instanceof AxiosError) {
+      const code = error.response?.data?.code;
+      const message = error.response?.data?.message;
+      console.log(code, message);
+      res.status(code).json({ code, message });
+    } else {
+      res.status(400).json({ code: 400, message: "Internal Server Error" });
+    }
   }
 };
 
