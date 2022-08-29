@@ -26,6 +26,7 @@ const MainDocument = ({ data }) => {
   const { workflow, status, type, id, user, recipients } = document;
 
   let signOrNot = "initial";
+
   const currentUserId = splitId(user?.id);
   const owner = data?.recipients?.find((recipient) => recipient?.is_owner);
   const currentUser = data?.recipients?.find(

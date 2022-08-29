@@ -73,6 +73,14 @@ const createDiscussion = (fetcher, id, data) => {
   return fetcher.post(`/documents/${id}/discussions`, data);
 };
 
+const updateDiscussion = (fetcher, id, data) => {
+  return fetcher.patch(`/documents/${id}/dicsussions`, data);
+};
+
+const removeDiscussion = (fetcher, id) => {
+  return fetcher.delete(`/documents/${id}/discussions`);
+};
+
 const fetchHistories = (fetcher, query) => {
   const { documentId, ...currentUrl } = query;
   const url = qs.stringify(currentUrl);
@@ -147,6 +155,29 @@ export const discussionsCreate = async (req, res) => {
     const { body } = req;
     await createDiscussion(req.fetcher, documentId, body);
     res.status(200).json({ code: 201, message: "successfully created" });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ code: 400, message: "Internal Server Error" });
+  }
+};
+
+export const updateDiscussions = async (req, res) => {
+  try {
+    const { documentId } = req?.query;
+    const { body } = req;
+    await updateDiscussion(req.fetcher, documentId, body);
+    res.status(200).json({ code: 200, message: "success" });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ code: 400, message: "Internal Server Error" });
+  }
+};
+
+export const removeDiscussions = async (req, res) => {
+  try {
+    const { documentId } = req?.query;
+    await removeDiscussion(req.fetcher, documentId);
+    res.status(200).json({ code: 200, messsage: "success" });
   } catch (error) {
     console.log(error);
     res.status(400).json({ code: 400, message: "Internal Server Error" });

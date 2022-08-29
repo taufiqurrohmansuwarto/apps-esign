@@ -19,7 +19,7 @@ import {
 import isEmpty from "lodash/isEmpty";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addRecipients,
@@ -96,6 +96,7 @@ const ListRecipients = ({
 };
 
 const ShareAndRequest = () => {
+  const queryClient = useQueryClient();
   const data = useSelector((state) => state.requestFromOthers);
   const dispatch = useDispatch();
   const [searching, setSearching] = useState("");
@@ -221,6 +222,7 @@ const ShareAndRequest = () => {
       const data = { documentId, data: currentDataPost };
       await recipientsMutation.mutateAsync(data);
       router.push(`/documents/${documentId}/view`);
+      queryClient.invalidateQueries(["layout-view", documentId]);
     }
   };
 

@@ -1,0 +1,4 @@
+1. fitur hapus ketika masih draft
+2. selesaikan reject review
+3. selesaikan self sign
+4. selesaikan sign pada tahapan request from others
