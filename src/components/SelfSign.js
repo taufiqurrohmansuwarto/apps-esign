@@ -17,6 +17,8 @@ import { Document, Page, pdfjs } from "react-pdf";
 import { useMutation } from "@tanstack/react-query";
 import documentServices from "../../src/services/documents";
 import SignMove from "./SignMove";
+import OtpInput from "react-otp-input";
+import { trim } from "lodash";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -137,7 +139,6 @@ const SelfSign = function ({
   removeSign,
 }) {
   const [open, setOpen] = useState(false);
-  const [document, setDocument] = useState(null);
   const [otp, setOtp] = useState("");
   const [reason, setReason] = useState("I approve this document");
   const [passphrase, setPassphrase] = useState("");
@@ -187,8 +188,7 @@ const SelfSign = function ({
       const data = {
         documentId: id,
         properties,
-        otp,
-        passphrase,
+        passphrase: trim(passphrase),
         reason,
       };
 
@@ -196,11 +196,6 @@ const SelfSign = function ({
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const onSubmit = async () => {
-    const { id } = documentData;
-    await otpMutation.mutateAsync(id);
   };
 
   if (loading == "loading") {
@@ -226,8 +221,8 @@ const SelfSign = function ({
   return (
     <>
       <Modal
-        title="OTP Verification"
-        width={700}
+        title="Masukkan Passphrase"
+        width={600}
         visible={open}
         zIndex={99999}
         closable={false}
@@ -240,26 +235,12 @@ const SelfSign = function ({
           setOpen(false);
         }}
       >
-        <p>We already sent code verification to your email. Please verify.</p>
-        <Space direction="vertical">
-          <Input
-            style={{ width: 300 }}
-            placeholder="Passphrase"
-            value={passphrase}
-            onChange={(e) => setPassphrase(e?.target?.value)}
-          />
-          <InputNumber
-            style={{ width: 300 }}
-            placeholder="OTP Number"
-            value={otp}
-            onChange={(e) => setOtp(e)}
-          />
-          <Input
-            placeholder="Reason"
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
-          />
-        </Space>
+        <Input.Password
+          required
+          size="large"
+          value={passphrase}
+          onChange={(e) => setPassphrase(e?.target?.value)}
+        />
       </Modal>
       <div style={{ padding: 10 }}>
         <Row justify="center">
@@ -274,8 +255,7 @@ const SelfSign = function ({
               </Button>
               <Button
                 disabled={signs.length === 0}
-                loading={otpMutation.isLoading}
-                onClick={onSubmit}
+                onClick={() => setOpen(true)}
               >
                 Finish
               </Button>
