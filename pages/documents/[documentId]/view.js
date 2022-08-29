@@ -27,6 +27,14 @@ const MainDocument = ({ data }) => {
 
   let signOrNot = "initial";
 
+  // todo : buat status document initial sign atau ongoing
+
+  if (status === "completed") {
+    signOrNot = "sign";
+  } else if (status === "in progress") {
+    signOrNot = "on_going";
+  }
+
   const currentUserId = splitId(user?.id);
   const owner = data?.recipients?.find((recipient) => recipient?.is_owner);
   const currentUser = data?.recipients?.find(
@@ -67,6 +75,7 @@ const MainDocument = ({ data }) => {
   } else if (requestFromOthersReviewerNotFinished) {
     return (
       <DocumentFinishOrWaiting
+        type={signOrNot}
         role={currentUser?.role}
         status={currentUser?.signatory_status}
         workflow="requestFromOthers"
