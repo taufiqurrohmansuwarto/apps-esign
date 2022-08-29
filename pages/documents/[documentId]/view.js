@@ -29,17 +29,21 @@ const MainDocument = ({ data }) => {
 
   // todo : buat status document initial sign atau ongoing
 
-  if (status === "completed") {
-    signOrNot = "sign";
-  } else if (status === "in progress") {
-    signOrNot = "on_going";
-  }
-
   const currentUserId = splitId(user?.id);
   const owner = data?.recipients?.find((recipient) => recipient?.is_owner);
   const currentUser = data?.recipients?.find(
     (recipient) => toString(recipient?.employee_id) === toString(currentUserId)
   );
+
+  const isThereCompleted = data?.recipients?.some(
+    (r) => r?.status === "completed"
+  );
+
+  if (owner?.status === "completed" || owner?.status === "rejected") {
+    signOrNot = "sign";
+  } else if (status === "in progress" && isThereCompleted) {
+    signOrNot = "on_going";
+  }
 
   // fucking not finished
   const workflowSelfSignNotFinisihed =
@@ -74,18 +78,20 @@ const MainDocument = ({ data }) => {
     return <MainRequestFromOthersSign id={id} />;
   } else if (requestFromOthersReviewerNotFinished) {
     return (
-      <DocumentFinishOrWaiting
-        type={signOrNot}
-        role={currentUser?.role}
-        status={currentUser?.signatory_status}
-        workflow="requestFromOthers"
-        id={id}
-      />
+      <>
+        <DocumentFinishOrWaiting
+          type={signOrNot}
+          role={currentUser?.role}
+          status={currentUser?.signatory_status}
+          workflow="requestFromOthers"
+          id={id}
+        />
+      </>
     );
   } else {
     return (
       <>
-        <DocumentFinishOrWaiting id={id} />
+        <DocumentFinishOrWaiting type={signOrNot} id={id} />
       </>
     );
   }

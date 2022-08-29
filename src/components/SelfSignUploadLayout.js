@@ -9,11 +9,18 @@ const PageContainer = dynamic(
 
 const StepSelfSign = ({ step = 0 }) => {
   return (
-    <div style={{ marginBottom: 16, marginTop: 16 }}>
+    <div
+      style={{
+        marginBottom: 16,
+        marginTop: 16,
+        paddingLeft: 16,
+        paddingRight: 16,
+      }}
+    >
       <Steps size="small" current={step}>
-        <Steps.Step title="Upload Document" />
-        <Steps.Step title="Place Signature" />
-        <Steps.Step title="Finish" />
+        <Steps.Step title="Unggah Dokumen" />
+        <Steps.Step title="Tempatkan tanda tangan" />
+        <Steps.Step title="Selesai" />
       </Steps>
     </div>
   );

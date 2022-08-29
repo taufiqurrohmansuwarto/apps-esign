@@ -91,7 +91,7 @@ const RequestFromOthersSignNotFinish = () => {
 };
 
 export default function ({
-  type = "initial",
+  type,
   id,
   role = "reviewer",
   status,

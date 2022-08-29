@@ -30,6 +30,10 @@ const PdfDocument = ({
   updateFrame,
   images,
   removeSign,
+
+  currentPage,
+  totalPage,
+  onChangePage,
 }) => {
   const onLoadDocumentSucces = ({ numPages }) => {
     changePageDocument({ currentPage: 1, totalPage: numPages });
@@ -51,12 +55,34 @@ const PdfDocument = ({
     <div
       style={{
         width: "100%",
-        height: "86vh",
+        height: "70vh",
         overflowY: "scroll",
         boxSizing: "content-box",
         padding: "0px 10px",
       }}
     >
+      <div
+        style={{
+          position: "fixed",
+          right: "4rem",
+          bottom: "4rem",
+          marginTop: 10,
+          zIndex: 10,
+          backgroundColor: "white",
+          padding: 10,
+          borderRadius: 5,
+        }}
+      >
+        <Pagination
+          simple
+          current={currentPage}
+          total={totalPage}
+          defaultPageSize={1}
+          size="small"
+          onChange={onChangePage}
+        />
+      </div>
+      <div></div>
       <Row justify="center">
         <Col>
           <div ref={ref} style={{ position: "relative" }}>
@@ -235,18 +261,8 @@ const SelfSign = function ({
           />
         </Space>
       </Modal>
-      <div style={{ padding: 5 }}>
+      <div style={{ padding: 10 }}>
         <Row justify="center">
-          <Col push={2}>
-            <Pagination
-              simple
-              current={documents.currentPage}
-              total={documents.totalPage}
-              defaultPageSize={1}
-              size="small"
-              onChange={changePagination}
-            />
-          </Col>
           <Col push={6}>
             <Space>
               <Button
@@ -265,11 +281,10 @@ const SelfSign = function ({
               </Button>
             </Space>
           </Col>
-          {/* )} */}
         </Row>
       </div>
       {signs.length !== 0 && (
-        <div style={{ backgroundColor: "#531dab", padding: 10 }}>
+        <div style={{ backgroundColor: "#531dab", padding: 2 }}>
           <Row justify="center">
             <Col>
               <div style={{ color: "white" }}>
@@ -284,7 +299,10 @@ const SelfSign = function ({
         </div>
       )}
       <div>
-        <Row justify="center" style={{ zIndex: 1 }}>
+        <Row
+          justify="center"
+          style={{ zIndex: 1, backgroundColor: "GrayText" }}
+        >
           <Col span={24}>
             <div
               style={{
@@ -296,6 +314,9 @@ const SelfSign = function ({
             >
               {loading === "idle" && docUrl && (
                 <PdfDocument
+                  currentPage={documents.currentPage}
+                  totalPage={documents.totalPage}
+                  onChangePage={changePagination}
                   docUrl={docUrl}
                   loadPageSuccess={loadPageSuccess}
                   changePageDocument={changePageDocument}
