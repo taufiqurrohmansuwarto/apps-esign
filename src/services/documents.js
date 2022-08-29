@@ -57,6 +57,18 @@ const createDiscussions = (documentId, data) => {
     .then((res) => res?.data);
 };
 
+const updateDiscussion = (documentId, data) => {
+  return esignFetcher
+    .patch(`/documents/${documentId}/discussions`, data)
+    .then((res) => res?.data);
+};
+
+const removeDiscussion = (documentId) => {
+  return esignFetcher
+    .delete(`/documents/${documentId}`)
+    .then((res) => res?.data);
+};
+
 const fetchHistories = (query) => {
   const { documentId, ...currentQuery } = query;
 
@@ -155,6 +167,8 @@ export default {
   getDashboard,
   fetchDiscussions,
   createDiscussions,
+  updateDiscussion,
+  removeDiscussion,
   fetchHistories,
   detailDocument,
   upload,
