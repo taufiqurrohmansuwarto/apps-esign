@@ -10,7 +10,7 @@ const Draft = () => {
         <title>Dokumen Draft</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
-      <ListDocuments type="draft" />;
+      <ListDocuments type="draft" />
     </>
   );
 };

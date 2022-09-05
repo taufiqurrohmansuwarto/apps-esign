@@ -10,7 +10,7 @@ const Done = () => {
         <title>Dokumen Selesai</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
-      <ListDocuments type="completed" />;
+      <ListDocuments type="completed" />
     </>
   );
 };

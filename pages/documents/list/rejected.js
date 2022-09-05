@@ -10,7 +10,7 @@ const Rejected = () => {
         <title>Dokumen ditolak</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
-      <ListDocuments type="rejected" />;
+      <ListDocuments type="rejected" />
     </>
   );
 };

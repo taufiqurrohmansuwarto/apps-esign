@@ -208,7 +208,6 @@ const SelfSign = function ({
         confirmLoading={approveSignMutation.isLoading}
         maskClosable={false}
         centered
-        // confirmLoading={signDocumentRequest.loading}
         onCancel={() => {
           setOpen(false);
         }}
