@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import mainRoutes from "../routes/main-routes";
+import BadgeNotifications from "./BadgeNotifications";
 import ButtonCreate from "./ButtonCreate";
 
 const ProLayout = dynamic(() => import("@ant-design/pro-layout"), {
@@ -37,6 +38,28 @@ const menu = (router) => (
 
 // create menu dashboard, documents, contacts
 
+const rightContentRender = (data, router) => {
+  const gotoNotifications = () => {
+    router.push("/notifications");
+  };
+
+  return (
+    <Space size="large">
+      <Space>
+        <div style={{ cursor: "pointer" }} onClick={gotoNotifications}>
+          <BadgeNotifications />
+        </div>
+      </Space>
+
+      <Space align="center">
+        <Dropdown overlay={menu(router)}>
+          <Avatar style={{ cursor: "pointer" }} src={data?.user?.image} />
+        </Dropdown>
+      </Space>
+    </Space>
+  );
+};
+
 const menuItemRender = (options, element) => {
   return (
     <Link href={`${options.path}`}>
@@ -64,16 +87,7 @@ function Layout({
       menuHeaderRender={() => <ButtonCreate />}
       menuItemRender={menuItemRender}
       selectedKeys={[active]}
-      rightContentRender={() => {
-        return (
-          <Space align="center">
-            <span>{data?.user?.name}</span>
-            <Dropdown overlay={menu(router)}>
-              <Avatar style={{ cursor: "pointer" }} src={data?.user?.image} />
-            </Dropdown>
-          </Space>
-        );
-      }}
+      rightContentRender={() => rightContentRender(data, router)}
       title={title}
       theme="dark"
       fixSiderbar

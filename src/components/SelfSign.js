@@ -1,25 +1,22 @@
 import { WarningOutlined } from "@ant-design/icons";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Button,
-  Card,
   Col,
   Input,
-  InputNumber,
   message,
   Modal,
   Pagination,
   Row,
-  Skeleton,
   Space,
 } from "antd";
+import { trim } from "lodash";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import documentServices from "../../src/services/documents";
+import DocumentLoading from "./DocumentLoading";
 import SignMove from "./SignMove";
-import OtpInput from "react-otp-input";
-import { trim } from "lodash";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -68,7 +65,7 @@ const PdfDocument = ({
         style={{
           position: "fixed",
           right: "4rem",
-          bottom: "4rem",
+          bottom: "6rem",
           marginTop: 10,
           zIndex: 10,
           backgroundColor: "white",
@@ -196,23 +193,7 @@ const SelfSign = function ({
   };
 
   if (loading == "loading") {
-    return (
-      <Row justify="center" align="middle" style={{ padding: 18 }}>
-        <Card style={{ width: 600, height: 800 }}>
-          <Skeleton avatar={{ size: 100 }} active />
-          <Skeleton paragraph active />
-          <Skeleton paragraph active />
-          <Row justify="center" align="middle">
-            <Space size="large">
-              <Skeleton.Image size="large" active />
-              <Skeleton.Image size="large" active />
-              <Skeleton.Image size="large" active />
-            </Space>
-          </Row>
-          <Skeleton paragraph active />
-        </Card>
-      </Row>
-    );
+    return <DocumentLoading />;
   }
 
   return (
@@ -248,14 +229,14 @@ const SelfSign = function ({
                 onClick={addSign}
                 disabled={approveSignMutation.isLoading}
               >
-                Place Signature
+                Tempatkan tanda tangan
               </Button>
               <Button
                 disabled={signs.length === 0}
                 onClick={() => setOpen(true)}
                 loading={approveSignMutation.isLoading}
               >
-                Finish
+                Selesai
               </Button>
             </Space>
           </Col>

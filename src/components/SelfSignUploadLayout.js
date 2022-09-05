@@ -31,7 +31,9 @@ function SelfSignUploadLayout({ step = 0, children }) {
     <Layout>
       <PageContainer subTitle="Workflow" fixedHeader title="Self Sign" />
       <StepSelfSign step={step} />
-      <Card>{children}</Card>
+      <div style={{ paddingLeft: 8, paddingRight: 8 }}>
+        <Card>{children}</Card>
+      </div>
     </Layout>
   );
 }
