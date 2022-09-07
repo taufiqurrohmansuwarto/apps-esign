@@ -1,6 +1,7 @@
-import { Button, Col, Divider, Row, Typography } from "antd";
+import { Space, Button, Col, Divider, Row, Typography } from "antd";
 import { getProviders, signIn } from "next-auth/react";
 import Head from "next/head";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function SignIn({ providers }) {
@@ -13,14 +14,19 @@ export default function SignIn({ providers }) {
         />
       </Head>
       <Row
-        style={{
-          height: "100vh",
-          display: "flex",
-        }}
-        align="middle"
+        // gutter={[48, 48]}
+        style={{ minHeight: "100vh" }}
         justify="center"
       >
-        <Col>
+        <Col xs={{ span: 24 }} md={{ span: 12 }}>
+          <Image
+            src="https://siasn.bkd.jatimprov.go.id:9000/public/images.jpg"
+            layout="fill"
+            objectFit="cover"
+          />
+        </Col>
+
+        <Col xs={{ span: 24 }} md={{ span: 12 }}>
           <Typography.Title>E-Sign</Typography.Title>
           {Object?.values(providers).map((provider) => (
             <div key={provider.name}>
@@ -30,11 +36,26 @@ export default function SignIn({ providers }) {
             </div>
           ))}
           <Divider />
-          <Typography.Text>
-            <Link href="/check-document">
-              <a>Ingin cek dokumen?</a>
-            </Link>
-          </Typography.Text>
+          <Space>
+            <Typography.Text>
+              <Link href="/check-document">
+                <a>Ingin cek dokumen?</a>
+              </Link>
+            </Typography.Text>
+
+            <Image
+              src="https://siasn.bkd.jatimprov.go.id:9000/public/logobkd.jpg"
+              width="30%"
+              height="30%"
+              objectFit="contain"
+            />
+            <Image
+              src="https://siasn.bkd.jatimprov.go.id:9000/public/pemprov.png"
+              width="30%"
+              height="30%"
+              objectFit="contain"
+            />
+          </Space>
         </Col>
       </Row>
     </>

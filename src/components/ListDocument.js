@@ -11,6 +11,7 @@ import {
   Dropdown,
   Input,
   Menu,
+  Table,
   Tag,
   Tooltip,
   Typography,
@@ -25,6 +26,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import documents from "../services/documents";
 import { documentStatus, recipientStatus } from "../utils";
+import moment from "moment";
 
 const ProList = dynamic(() => import("@ant-design/pro-list"), { ssr: false });
 
@@ -114,7 +116,7 @@ const ListDocuments = ({ type = "all" }) => {
   const [query, setQuery] = useState({
     type,
     page: 1,
-    pageSize: 10,
+    pageSize: 20,
   });
 
   const { data, isLoading } = useQuery(
@@ -126,9 +128,93 @@ const ListDocuments = ({ type = "all" }) => {
     }
   );
 
+  const column = [
+    {
+      key: "title",
+      title: "Judul Dokumen",
+      width: 700,
+      render: (_, row) => {
+        return (
+          <Link href={`/documents/${row?.document_id}/view`}>
+            <span style={{ cursor: "pointer" }}>{row?.title}.pdf</span>
+          </Link>
+        );
+      },
+    },
+    // { key: "workflow", title: "Workflow", dataIndex: "workflow", width: 200 },
+    {
+      key: "upload_date",
+      title: "Tanggal Unggah",
+      render: (_, row) => {
+        return moment(row.upload_date).format("DD MMM, YYYY hh:mm");
+      },
+      width: 200,
+    },
+    {
+      key: "recipients",
+      title: "Peserta",
+      width: 200,
+      render: (_, item) => {
+        return (
+          <Avatar.Group size="large" maxCount={3}>
+            {item.recipients.map((recipient) => (
+              <Tooltip
+                color="white"
+                key={recipient.id}
+                title={<MyToolTip recipient={recipient} />}
+              >
+                <Avatar src={recipient?.profile_picture} />
+              </Tooltip>
+            ))}
+          </Avatar.Group>
+        );
+      },
+    },
+    {
+      key: "status",
+      title: "Status",
+      width: 200,
+      render: (_, item) => {
+        return (
+          <TagStatus
+            workflow={item.workflow}
+            status={item.status}
+            role={item?.role}
+            signatory_status={item?.signatory_status}
+          />
+        );
+      },
+    },
+    {
+      key: "actions",
+      title: "Aksi",
+      width: 10,
+      render: (_, row) => {
+        const { ongoing_document, sign_document, initial_document } = row;
+        const document = {
+          ongoing_document,
+          sign_document,
+          initial_document,
+        };
+        return (
+          <div>
+            <ActionDropdown documentId={row?.document_id} document={document} />
+          </div>
+        );
+      },
+    },
+  ];
+
   return (
     <ConfigProvider locale={enUs}>
-      <ProList
+      <Table
+        size="small"
+        rowKey="id"
+        loading={isLoading}
+        dataSource={data?.data?.list}
+        columns={column}
+      />
+      {/* <ProList
         rowKey="id"
         loading={isLoading}
         headerTitle={`${capitalize(type)} Documents`}
@@ -254,7 +340,7 @@ const ListDocuments = ({ type = "all" }) => {
           searchText: "Cari",
           resetText: "Reset",
         }}
-      />
+      /> */}
     </ConfigProvider>
   );
 };

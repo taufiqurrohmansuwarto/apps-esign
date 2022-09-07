@@ -27,8 +27,11 @@ module.exports = withAntdLess({
       },
     ];
   },
-  domains: [""],
   modifyVars: { "@primary-color": "#04f" },
+  images: {
+    domains: ["siasn.bkd.jatimprov.go.id"],
+    formats: ["image/webp"],
+  },
   lessVarsFilePath: "./src/styles/variables.less",
   lessVarsFilePathAppendToEndOfContent: false,
   cssLoaderOptions: {},
