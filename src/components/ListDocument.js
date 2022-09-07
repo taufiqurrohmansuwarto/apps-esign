@@ -11,6 +11,7 @@ import {
   Dropdown,
   Input,
   Menu,
+  Space,
   Table,
   Tag,
   Tooltip,
@@ -135,9 +136,14 @@ const ListDocuments = ({ type = "all" }) => {
       width: 700,
       render: (_, row) => {
         return (
-          <Link href={`/documents/${row?.document_id}/view`}>
-            <span style={{ cursor: "pointer" }}>{row?.title}.pdf</span>
-          </Link>
+          <Space>
+            <Avatar
+              src={"https://siasn.bkd.jatimprov.go.id:9000/public/empty.jpg"}
+            />
+            <Link href={`/documents/${row?.document_id}/view`}>
+              <a>{row?.title}.pdf</a>
+            </Link>
+          </Space>
         );
       },
     },
@@ -163,7 +169,7 @@ const ListDocuments = ({ type = "all" }) => {
                 key={recipient.id}
                 title={<MyToolTip recipient={recipient} />}
               >
-                <Avatar src={recipient?.profile_picture} />
+                <Avatar size="large" src={recipient?.profile_picture} />
               </Tooltip>
             ))}
           </Avatar.Group>
@@ -208,7 +214,6 @@ const ListDocuments = ({ type = "all" }) => {
   return (
     <ConfigProvider locale={enUs}>
       <Table
-        size="small"
         rowKey="id"
         loading={isLoading}
         dataSource={data?.data?.list}
