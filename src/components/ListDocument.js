@@ -7,6 +7,7 @@ import {
 import {
   Avatar,
   Button,
+  Card,
   ConfigProvider,
   Dropdown,
   Input,
@@ -117,7 +118,7 @@ const ListDocuments = ({ type = "all" }) => {
   const [query, setQuery] = useState({
     type,
     page: 1,
-    pageSize: 20,
+    pageSize: 10,
   });
 
   const { data, isLoading } = useQuery(
@@ -129,11 +130,17 @@ const ListDocuments = ({ type = "all" }) => {
     }
   );
 
+  const handleonChangeQUery = (e) => {
+    const { current } = e;
+    console.log(e);
+    setQuery({ ...query, page: current });
+  };
+
   const column = [
     {
       key: "title",
       title: "Judul Dokumen",
-      width: 700,
+      width: 500,
       render: (_, row) => {
         return (
           <Space>
@@ -141,7 +148,7 @@ const ListDocuments = ({ type = "all" }) => {
               src={"https://siasn.bkd.jatimprov.go.id:9000/public/empty.jpg"}
             />
             <Link href={`/documents/${row?.document_id}/view`}>
-              <a>{row?.title}.pdf</a>
+              <a>{row?.title}</a>
             </Link>
           </Space>
         );
@@ -213,12 +220,46 @@ const ListDocuments = ({ type = "all" }) => {
 
   return (
     <ConfigProvider locale={enUs}>
-      <Table
-        rowKey="id"
-        loading={isLoading}
-        dataSource={data?.data?.list}
-        columns={column}
-      />
+      <Card>
+        <Table
+          rowKey="id"
+          size="small"
+          loading={isLoading}
+          dataSource={data?.data?.list}
+          title={() => {
+            return (
+              <div style={{ width: 300, marginBottom: "2rem" }}>
+                <Input.Search
+                  placeholder="Cari Dokumen"
+                  onSearch={(e) => {
+                    if (e) {
+                      setQuery({
+                        ...query,
+                        title: e,
+                        page: 1,
+                        pageSize: 10,
+                        type,
+                      });
+                    } else {
+                      setQuery({ page: 1, pageSize: 10, type });
+                    }
+                  }}
+                  allowClear
+                  enterButton
+                />
+              </div>
+            );
+          }}
+          columns={column}
+          onChange={handleonChangeQUery}
+          pagination={{
+            current: query?.page,
+            defaultPageSize: 10,
+            total: data?.meta?.total,
+            defaultCurrent: query?.page,
+          }}
+        />
+      </Card>
       {/* <ProList
         rowKey="id"
         loading={isLoading}
